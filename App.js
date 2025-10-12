@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from "./src/auth/login";
+import Register from "./src/auth/register";
 
 
 const Stack = createStackNavigator();
@@ -12,7 +13,7 @@ export default function App() {
      <NavigationContainer>
         <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={Login} />
- 
+          <Stack.Screen name="Register" component={Register} options={{ headerShown: true }} />
         </Stack.Navigator>
       </NavigationContainer>
   );
