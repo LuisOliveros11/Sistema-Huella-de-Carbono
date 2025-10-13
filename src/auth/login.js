@@ -76,7 +76,7 @@ const Login = () => {
           <View style={styles.formAction}>
             <TouchableOpacity
               onPress={async () => {
-               //
+               navigation.navigate('Home');
               }}>
               <View style={styles.btn}>
                 <Text style={styles.btnText}>Login</Text>
