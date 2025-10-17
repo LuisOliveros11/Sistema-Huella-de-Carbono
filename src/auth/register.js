@@ -3,35 +3,36 @@ import { StyleSheet, ScrollView, View, Image, Text, TouchableOpacity, TextInput,
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-//import { BASE_URL } from '../../config';
+import { BASE_URL } from '../../config';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 const Register = () => {
   const navigation = useNavigation();
-  //const baseUrl = BASE_URL;
+  const baseUrl = BASE_URL;
   const [form, setForm] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
-  /*const handleRegister = async () => {
+  const handleRegister = async () => {
     if (form.password !== form.confirmPassword) {
       alert('Las contraseñas no coinciden.');
       return;
     }
 
     try {
-      const response = await fetch(`${baseUrl}/registrarUsuario`, {
+      const response = await fetch(`${baseUrl}/crearUsuario`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: form.username,
-          email: form.email,
-          password: form.password,
+          nombre: form.username,
+          correo: form.email,
+          contrasena: form.password,
         }),
       });
 
@@ -54,148 +55,142 @@ const Register = () => {
       console.error('Error en el registro:', error);
       alert('No se pudo conectar al servidor.');
     }
-  };*/
+  };
 
   return (
-    <SafeAreaProvider style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 20}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView
-            contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
+   <SafeAreaProvider style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          {/* Header */}
+          <View style={styles.header}>
+            <Image
+              source={require('../../assets/login_logo.png')}
+              style={styles.headerImg}
+            />
+            <Text style={styles.title}>Pantalla de Registro</Text>
+            <Text style={styles.subtitle}>Crea tu cuenta en la plataforma</Text>
+          </View>
+
+          {/* Formulario */}
+          <KeyboardAwareScrollView
             keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
+            enableOnAndroid={true}
+            extraScrollHeight={Platform.OS === 'ios' ? 100 : 120}
+            contentContainerStyle={{ paddingBottom: 40 }}
+            showsVerticalScrollIndicator={false} 
           >
-            <View style={[styles.container, { minHeight: '100%' }]}>
-              <View style={styles.header}>
-                <Image
-                  source={require('../../assets/login_logo.png')}
-                  style={styles.headerImg}
-                />
-                <Text style={styles.title}>Pantalla de Registro</Text>
-                <Text style={styles.subtitle}>
-                  Crea tu cuenta en la plataforma
-                </Text>
+            <View style={styles.form}>
+              {/* Usuario */}
+              <View style={styles.input}>
+                <Text style={styles.inputLabel}>Usuario</Text>
+                <View style={styles.inputWithIcon}>
+                  <TextInput
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    onChangeText={(username) => setForm({ ...form, username })}
+                    placeholder="tu_usuario"
+                    placeholderTextColor="#6b7280"
+                    style={styles.inputControlWithIcon}
+                    value={form.username}
+                  />
+                  <FeatherIcon
+                    name="user"
+                    size={20}
+                    color="#134ded"
+                    style={styles.inputIcon}
+                  />
+                </View>
               </View>
 
-              <View style={styles.form}>
-                <View style={styles.input}>
-                  <Text style={styles.inputLabel}>Usuario</Text>
-                  <View style={styles.inputWithIcon}>
-                    <TextInput
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      clearButtonMode="while-editing"
-                      onChangeText={(username) =>
-                        setForm({ ...form, username })
-                      }
-                      placeholder="tu_usuario"
-                      placeholderTextColor="#6b7280"
-                      style={styles.inputControlWithIcon}
-                      value={form.username}
-                    />
-                    <FeatherIcon
-                      name="user"
-                      size={20}
-                      color="#134ded"
-                      style={styles.inputIcon}
-                    />
-                  </View>
+              {/* Correo */}
+              <View style={styles.input}>
+                <Text style={styles.inputLabel}>Correo electrónico</Text>
+                <View style={styles.inputWithIcon}>
+                  <TextInput
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    keyboardType="email-address"
+                    onChangeText={(email) => setForm({ ...form, email })}
+                    placeholder="anonimo@gmail.com"
+                    placeholderTextColor="#6b7280"
+                    style={styles.inputControlWithIcon}
+                    value={form.email}
+                  />
+                  <FeatherIcon
+                    name="at-sign"
+                    size={20}
+                    color="#134ded"
+                    style={styles.inputIcon}
+                  />
                 </View>
+              </View>
 
-                <View style={styles.input}>
-                  <Text style={styles.inputLabel}>Correo electrónico</Text>
-                  <View style={styles.inputWithIcon}>
-                    <TextInput
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      clearButtonMode="while-editing"
-                      keyboardType="email-address"
-                      onChangeText={(email) => setForm({ ...form, email })}
-                      placeholder="anonimo@gmail.com"
-                      placeholderTextColor="#6b7280"
-                      style={styles.inputControlWithIcon}
-                      value={form.email}
-                    />
-                    <FeatherIcon
-                      name="at-sign"
-                      size={20}
-                      color="#134ded"
-                      style={styles.inputIcon}
-                    />
-                  </View>
+              {/* Contraseña */}
+              <View style={styles.input}>
+                <Text style={styles.inputLabel}>Contraseña</Text>
+                <View style={styles.inputWithIcon}>
+                  <TextInput
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    onChangeText={(password) => setForm({ ...form, password })}
+                    placeholder="********"
+                    placeholderTextColor="#6b7280"
+                    style={styles.inputControlWithIcon}
+                    secureTextEntry={true}
+                    value={form.password}
+                  />
+                  <FeatherIcon
+                    name="lock"
+                    size={20}
+                    color="#134ded"
+                    style={styles.inputIcon}
+                  />
                 </View>
+              </View>
 
-                <View style={styles.input}>
-                  <Text style={styles.inputLabel}>Contraseña</Text>
-                  <View style={styles.inputWithIcon}>
-                    <TextInput
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      clearButtonMode="while-editing"
-                      onChangeText={(password) =>
-                        setForm({ ...form, password })
-                      }
-                      placeholder="********"
-                      placeholderTextColor="#6b7280"
-                      style={styles.inputControlWithIcon}
-                      secureTextEntry={true}
-                      value={form.password}
-                    />
-                    <FeatherIcon
-                      name="lock"
-                      size={20}
-                      color="#134ded"
-                      style={styles.inputIcon}
-                    />
-                  </View>
+              {/* Confirmar Contraseña */}
+              <View style={styles.input}>
+                <Text style={styles.inputLabel}>Confirmar contraseña</Text>
+                <View style={styles.inputWithIcon}>
+                  <TextInput
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    clearButtonMode="while-editing"
+                    onChangeText={(confirmPassword) =>
+                      setForm({ ...form, confirmPassword })
+                    }
+                    placeholder="********"
+                    placeholderTextColor="#6b7280"
+                    style={styles.inputControlWithIcon}
+                    secureTextEntry={true}
+                    value={form.confirmPassword}
+                  />
+                  <FeatherIcon
+                    name="lock"
+                    size={20}
+                    color="#134ded"
+                    style={styles.inputIcon}
+                  />
                 </View>
+              </View>
 
-                <View style={styles.input}>
-                  <Text style={styles.inputLabel}>Confirmar contraseña</Text>
-                  <View style={styles.inputWithIcon}>
-                    <TextInput
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      clearButtonMode="while-editing"
-                      onChangeText={(confirmPassword) =>
-                        setForm({ ...form, confirmPassword })
-                      }
-                      placeholder="********"
-                      placeholderTextColor="#6b7280"
-                      style={styles.inputControlWithIcon}
-                      secureTextEntry={true}
-                      value={form.confirmPassword}
-                    />
-                    <FeatherIcon
-                      name="lock"
-                      size={20}
-                      color="#134ded"
-                      style={styles.inputIcon}
-                    />
+              {/* Botón */}
+              <View style={styles.formAction}>
+                <TouchableOpacity onPress={handleRegister}>
+                  <View style={styles.btn}>
+                    <Text style={styles.btnText}>Registrate</Text>
                   </View>
-                </View>
-
-                <View style={styles.formAction}>
-                  <TouchableOpacity
-                    onPress={{
-                        //
-                    }}
-                  >
-                    <View style={styles.btn}>
-                      <Text style={styles.btnText}>Registrate</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
+        </View>
+      </TouchableWithoutFeedback>
     </SafeAreaProvider>
+   
   );
 };
 
