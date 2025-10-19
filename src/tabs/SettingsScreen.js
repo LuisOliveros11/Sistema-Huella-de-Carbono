@@ -1,9 +1,10 @@
 import React, { useContext, useRef } from 'react';
-import { StyleSheet, SafeAreaView, View, Image, Text, TouchableOpacity, ScrollView, Button } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Image, Text, TouchableOpacity, ScrollView, Button, } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 //import { AuthContext } from '../Components/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const SettingsScreen = () => {
     const navigation = useNavigation();
@@ -25,7 +26,7 @@ const SettingsScreen = () => {
     };
     return (
 
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <SafeAreaProvider style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.profile}>
                     <Text style={styles.profileName}>Nombres</Text>
@@ -92,7 +93,7 @@ const SettingsScreen = () => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaProvider>
 
     );
 };

@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, ScrollView, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -21,6 +22,8 @@ const HomeScreen = () => {
       </SafeAreaView>
     );
   }*/
+ const navigation = useNavigation();
+ 
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
@@ -37,7 +40,7 @@ const HomeScreen = () => {
                 <Text style={[styles.cardText, {fontWeight: 300, fontSize: 11}]}>Contesta las preguntas del formulario para conocer tu huella de carbono</Text>
                 <TouchableOpacity
                   onPress={async () => {
-                    //navigation.navigate('UserForm');
+                    navigation.navigate('UserForm');
                   }}>
                   <View style={[styles.cardButton, {paddingHorizontal: '16%'}]}>
                     <Text style={[styles.cardButtonText, {color: "#52C94B"}]}>Iniciar</Text>
@@ -82,7 +85,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: '#eBecf4',
     paddingHorizontal: 16,
     paddingTop: 20
     

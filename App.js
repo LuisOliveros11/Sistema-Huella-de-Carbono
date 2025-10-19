@@ -6,6 +6,7 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import Login from "./src/auth/login";
 import Register from "./src/auth/register";
 import Home from "./src/tabs/HomeScreen";
+import UserForm from './src/screens/UserForm';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
 import BottomNavigator from './src/components/BottomNavigation';
 
@@ -18,7 +19,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} options={{ headerShown: true }} />
+          <Stack.Screen name="Register" component={Register} options={{ headerShown: true, headerTitle: "Registro" }} />
+          <Stack.Screen name="UserForm" component={UserForm} options={{ headerShown: true, headerTitle: "Cuestionario", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff" }} />
          <Stack.Screen 
             name="Tabs" 
             component={BottomNavigator} 
