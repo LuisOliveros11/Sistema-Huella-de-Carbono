@@ -40,7 +40,7 @@ const HomeScreen = () => {
                 <Text style={[styles.cardText, {fontWeight: 300, fontSize: 11}]}>Contesta las preguntas del formulario para conocer tu huella de carbono</Text>
                 <TouchableOpacity
                   onPress={async () => {
-                    navigation.navigate('UserForm');
+                    navigation.navigate('UserFormPreview');
                   }}>
                   <View style={[styles.cardButton, {paddingHorizontal: '16%'}]}>
                     <Text style={[styles.cardButtonText, {color: "#52C94B"}]}>Iniciar</Text>
