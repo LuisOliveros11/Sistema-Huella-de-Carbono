@@ -8,6 +8,7 @@ import Register from "./src/auth/register";
 import Home from "./src/tabs/HomeScreen";
 import UserFormPreview from './src/screens/UserFormPreview';
 import UserForm from './src/screens/UserForm';
+import UserStatistics from './src/screens/UserStatistics';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
 import BottomNavigator from './src/components/BottomNavigation';
 import { AuthProvider } from './src/components/AuthContext';
@@ -25,6 +26,7 @@ export default function App() {
             <Stack.Screen name="Register" component={Register} options={{ headerShown: true, headerTitle: "Registro" }} />
             <Stack.Screen name="UserFormPreview" component={UserFormPreview} options={{ headerShown: false, headerTitle: "Cuestionario", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff" }} />
             <Stack.Screen name="UserForm" component={UserForm} options={{ headerShown: true, headerTitle: "Cuestionario", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff",  animation: 'slide_from_right' }} />
+            <Stack.Screen name="UserStatistics" component={UserStatistics} options={{ headerShown: true, headerTitle: "Estadísticas", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff",  animation: 'slide_from_right' }} />
             <Stack.Screen
               name="Tabs"
               component={BottomNavigator}

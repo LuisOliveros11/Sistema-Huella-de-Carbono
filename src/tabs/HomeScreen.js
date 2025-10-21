@@ -62,7 +62,7 @@ const HomeScreen = () => {
               <Text style={[styles.cardText, {fontWeight: 300, fontSize: 11}]}>Consulta tu nivel de huella de carbono y conoce en qué debes mejorar</Text>
               <TouchableOpacity
                 onPress={async () => {
-                  //navigation.navigate('UserStatistics');
+                  navigation.navigate('UserStatistics');
                 }}>
                 <View style={[styles.cardButton, {paddingHorizontal: '16%'}]}>
                   <Text style={[styles.cardButtonText, {fontSize: 11}]}>Consultar</Text>
