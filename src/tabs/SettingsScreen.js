@@ -37,7 +37,7 @@ const SettingsScreen = () => {
                 <View style={styles.section}>
                     <Text style={styles.sectionHeader}>Datos de la cuenta</Text>
                     <TouchableOpacity onPress={() => {
-                        //
+                        navigation.navigate("ChangePassword")
                     }}>
                         <View style={styles.row}>
                             <View style={[styles.rowIcon, { backgroundColor: "#5ec206ff" }]}>
@@ -55,13 +55,13 @@ const SettingsScreen = () => {
 
                     </TouchableOpacity>
                      <TouchableOpacity onPress={() => {
-                        //
+                        navigation.navigate("EditProfile")
                     }}>
                         <View style={styles.row}>
                             <View style={[styles.rowIcon, { backgroundColor: "#5ec206ff" }]}>
                                 <FeatherIcon name="edit-3" color="#fff" size={18}></FeatherIcon>
                             </View>
-                            <Text style={[styles.rowLabel, { flex: 1 }]}>Cambiar contraseña</Text>
+                            <Text style={[styles.rowLabel, { flex: 1 }]}>Editar perfil</Text>
 
 
                             <FeatherIcon
