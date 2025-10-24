@@ -13,13 +13,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   useNavigation,
 } from '@react-navigation/native';
-//import { AuthContext } from '../Components/AuthContext';
-//import { BASE_URL } from '../../config'; 
+import { AuthContext } from '../components/AuthContext';
+import { BASE_URL } from '../../config'; 
 
 const Login = () => {
   const navigation = useNavigation();
-  //const { login } = useContext(AuthContext);
-  //const baseUrl = BASE_URL;
+  const { login } = useContext(AuthContext);
+  const baseUrl = BASE_URL;
   
   const [form, setForm] = useState({
     email: '',
@@ -76,7 +76,31 @@ const Login = () => {
           <View style={styles.formAction}>
             <TouchableOpacity
               onPress={async () => {
-               navigation.navigate("Tabs", { screen: "Home" });
+                try {
+                  const response = await fetch(`${baseUrl}/iniciarSesion`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                      correo: form.email,
+                      contrasena: form.password
+                    })
+                  });
+
+                  const data = await response.json();
+
+                  if (response.ok) {
+                    await login(data.token);
+                    navigation.navigate("Tabs", { screen: "Home" });
+                  } else {
+                    alert(data.message || "Error al iniciar sesion");
+                  }
+
+                } catch (error) {
+                  console.error("Error al iniciar seison:", error);
+                  alert("No se pudo conectar al servidor.");
+                }
 
               }}>
               <View style={styles.btn}>

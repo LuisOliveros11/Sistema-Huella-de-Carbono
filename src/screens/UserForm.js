@@ -282,8 +282,8 @@ const styles = StyleSheet.create({
     questionText: {
         textAlign: 'center',
         fontWeight: '700',
-        fontSize: 18,
-        marginBottom: 40
+        fontSize: 15,
+        marginBottom: 20
     },
     checkboxContainer: {
         flexDirection: 'row',
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     },
     checkboxText: {
         marginLeft: 10, 
-        fontSize: 16,
+        fontSize: 14,
     },
     btn: {
         backgroundColor: '#66DB00',
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 10,
         paddingHorizontal: 20,
-        marginTop: screenHeight * 0.06,
+        marginTop: screenHeight * 0.03,
     },
     btnText: {
         fontSize: 18,
