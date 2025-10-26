@@ -31,86 +31,242 @@ const UserForm = ({ route }) => {
     const questions = category === 'Estilo de vida'
         ? [
             {
-                code: 'Vida_01',
-                text: '1. ¿Cuánto tiempo dedicas a hacer ejercicio a la semana?',
+                code: 'EstiloVida_01',
+                text: '1. ¿Cuánto pagas aproximadamente de luz cada mes?',
                 options: [
-                    { label: 'Nunca', value: 0 },
-                    { label: '1–2 veces', value: 10 },
-                    { label: '3–4 veces', value: 20 },
-                    { label: '5 o más veces', value: 30 },
+                    { label: 'A) Menos de $150 MXN/mes.', value: 41 },
+                    { label: 'B) Entre $150 y $300 MXN/mes.', value: 80 },
+                    { label: 'C) Entre $351 y $700 MXN/mes.', value: 170 },
+                    { label: 'D) Entre $701 y $1100 MXN/mes.', value: 296 },
+                    { label: 'E) Más de $1100 MXN/mes.', value: 410 },
                 ]
             },
             {
-                code: 'Vida_02',
-                text: '2. ¿Cuánto tiempo dedicas a actividades recreativas?',
+                code: 'EstiloVida_02',
+                text: '2. ¿Tu vivienda usa calefacción o aire acondicionado con frecuencia?',
                 options: [
-                    { label: 'Nada', value: 0 },
-                    { label: '1–2 horas', value: 10 },
-                    { label: '3–5 horas', value: 20 },
-                    { label: 'Más de 5 horas', value: 30 },
+                    { label: 'A) No uso ninguno.', value: 5 },
+                    { label: 'B) Uso poco (ocasional).', value: 4 },
+                    { label: 'C) Uso moderado (estaciones).', value: 3 },
+                    { label: 'D) Uso frecuente (varias horas diarias).', value: 1 },
+                    { label: 'E) Uso todo el tiempo / intensivo.', value: 0 },
                 ]
             },
             {
-                code: 'Vida_03',
-                text: '3. ¿Cuántas horas de sueño promedio tienes por noche?',
+                code: 'EstiloVida_03',
+                text: '3. ¿Utilizas energías renovables (paneles solares, proveedor verde) en tu hogar?',
                 options: [
-                    { label: 'Menos de 5 horas', value: 0 },
-                    { label: '5–6 horas', value: 10 },
-                    { label: '7–8 horas', value: 20 },
-                    { label: 'Más de 8 horas', value: 30 },
+                    { label: 'A) Sí, completamente (paneles o 100% proveedor verde)', value: 5 },
+                    { label: 'B) Sí, parcialmente.', value: 4 },
+                    { label: 'C) Planeo hacerlo pero no aún.', value: 1 },
+                    { label: 'D) No y no planeo.', value: 0 },
+                    { label: 'E) No sé / no aplica.', value: 0 },
                 ]
             },
             {
-                code: 'Vida_04',
-                text: '4. ¿Con qué frecuencia participas en actividades sociales o reuniones con amigos?',
+                code: 'EstiloVida_04',
+                text: '4. ¿Cuántas duchas de 5–10 minutos tomas al día en promedio?',
                 options: [
-                    { label: 'Nunca', value: 0 },
-                    { label: '1–2 veces al mes', value: 10 },
-                    { label: '1–2 veces por semana', value: 20 },
-                    { label: 'Más de 3 veces por semana', value: 30 },
+                    { label: 'A) 1 ducha corta.', value: 0.295 },
+                    { label: 'B) 2 duchas cortas.', value: 0.59 },
+                    { label: 'C) 3 duchas cortas.', value: 0.885 },
+                    { label: 'D) 3+ duchas cortas.', value: 1.18 },
                 ]
             },
             {
-                code: 'Vida_05',
-                text: '5. ¿Cuánto tiempo pasas frente a pantallas (TV, computadora, celular) diariamente?',
+                code: 'EstiloVida_05',
+                text: '5. ¿Reciclas y separas residuos en tu hogar con regularidad?',
                 options: [
-                    { label: 'Más de 8 horas', value: 0 },
-                    { label: '5–8 horas', value: 10 },
-                    { label: '2–4 horas', value: 20 },
-                    { label: 'Menos de 2 horas', value: 30 },
+                    { label: 'A) Sí, siempre y correctamente.', value: 5 },
+                    { label: 'B) Sí, en gran parte.', value: 4 },
+                    { label: 'C) A veces.', value: 3 },
+                    { label: 'D) Rara vez.', value: 1 },
+                    { label: 'E) Nunca.', value: 0 },
                 ]
-            }
+            },
+            {
+                code: 'EstiloVida_06',
+                text: '6. ¿Con qué frecuencia compras ropa nueva?',
+                options: [
+                    { label: 'A) Casi nunca, compro ropa de calidad y duradera.', value: 0.5875 },
+                    { label: 'B) 1–2 veces al año.', value: 1.7625 },
+                    { label: 'C) 3–6 veces al año.', value: 5.2875 },
+                    { label: 'D) 7–12 veces al año (frecuente).', value: 11.1625 },
+                    { label: 'E) >12 veces al año (muy frecuente / compras impulsivas).', value: 17.625 },
+                ]
+            },
+            {
+                code: 'EstiloVida_07',
+                text: '7. ¿Qué tan seguido realizas mantenimiento para eficiencia energética en tu hogar (aislamiento, sellado, bombillas LED)?',
+                options: [
+                    { label: 'A) Regularmente (cada año).', value: 5 },
+                    { label: 'B) Ocasionalmente (cada 2–3 años).', value: 4 },
+                    { label: 'C) Muy poco (cada 4–7 años).', value: 2 },
+                    { label: 'D) Nunca.', value: 0 },
+                    { label: 'E) No aplica / no sé.', value: 0 },
+                ]
+            },
+            {
+                code: 'EstiloVida_08',
+                text: '8. ¿Con qué frecuencia compras productos nuevos (electrónicos, electrodomésticos) en un año?',
+                options: [
+                    { label: 'A) Casi nunca (0–1).', value: 8.3 },
+                    { label: 'B) 2–3 veces.', value: 41.6 },
+                    { label: 'C) 4–6 veces', value: 83.3 },
+                    { label: 'D) 7–10 veces.', value: 141.6 },
+                    { label: 'E) >10 veces.', value: 191.6 },
+                ]
+            },
+            {
+                code: 'EstiloVida_09',
+                text: '9. ¿Trabajas desde casa (HomeOffice) cuántos días a la semana en promedio?',
+                options: [
+                    { label: 'A) 5 días (completamente remoto).', value: 5 },
+                    { label: 'B) 3–4 días.', value: 3 },
+                    { label: 'C) 1–2 días.', value: 1 },
+                    { label: 'D) Casi nunca (0–1 al mes).', value: 0 },
+                    { label: 'E) Nunca (siempre presencial).', value: 0 },
+                ]
+            },
+            {
+                code: 'EstiloVida_10',
+                text: '10. ¿Participas activamente en prácticas de consumo responsable (segunda mano, reparar antes de reemplazar, préstamos/trueque)?',
+                options: [
+                    { label: 'A) Sí, siempre.', value: 5 },
+                    { label: 'B) A menudo.', value: 4 },
+                    { label: 'C) Algunas veces.', value: 3 },
+                    { label: 'D) Rara vez.', value: 2 },
+                    { label: 'E) Nunca.', value: 0 },
+                ]
+            },
         ]
         : category === 'Transporte'
             ? [
                 {
-                    code: 'Trans_01',
-                    text: '1. ¿Con qué frecuencia usas transporte público?',
+                    code: 'Transporte_01',
+                    text: '1. ¿Tienes vehículo propio?',
                     options: [
-                        { label: 'Nunca', value: 0 },
-                        { label: '1–2 veces por semana', value: 10 },
-                        { label: '3–4 veces por semana', value: 20 },
-                        { label: 'Diario', value: 30 },
+                        { label: 'A) Si', value: true },
+                        { label: 'B) No', value: false },
                     ]
                 },
                 {
-                    code: 'Trans_02',
-                    text: '2. ¿Con qué frecuencia usas vehículo propio?',
+                    code: 'Transporte_02',
+                    text: '2. Si usas automóvil, ¿qué tipo de combustible utiliza?',
                     options: [
-                        { label: 'Nunca', value: 0 },
-                        { label: '1–2 veces por semana', value: 10 },
-                        { label: '3–4 veces por semana', value: 20 },
-                        { label: 'Diario', value: 30 },
+                        { label: 'A) Eléctrico ', value: 0.153 },
+                        { label: 'B) Híbrido (eléctrico + gasolina).', value: 0.117 },
+                        { label: 'C) Gasolina.', value: 0.197 },
+                        { label: 'D) Diesel.', value: 0.131 },
+                        { label: 'E) No tengo automóvil.', value: 0 },
                     ]
                 },
                 {
-                    code: 'Trans_03',
-                    text: '3. ¿Usas bicicleta o caminas regularmente?',
+                    code: 'Transporte_03',
+                    text: '3. ¿Tu vehículo (si tienes) es de qué antigüedad aproximada?',
                     options: [
-                        { label: 'Nunca', value: 0 },
-                        { label: '1–2 veces por semana', value: 10 },
-                        { label: '3–4 veces por semana', value: 20 },
-                        { label: 'Diario', value: 30 },
+                        { label: 'A) 0–3 años.', value: 0.95 },
+                        { label: 'B) 4–8 años.', value: 1 },
+                        { label: 'C) 9-15 años.', value: 1.10 },
+                        { label: 'D) >15 años.', value: 1.2 },
+                        { label: 'E) No tengo automóvil.', value: 0 },
+                    ]
+                },
+                {
+                    code: 'Transporte_04',
+                    text: '4. ¿Cuál es tu modo de transporte principal para ir al trabajo/estudios?',
+                    options: [
+                        { label: 'A) A pie.', value: 0 },
+                        { label: 'B) Auto propio.', value: null },
+                        { label: 'C) Bicicleta / patín eléctrico.', value: 0.011 },
+                        { label: 'D) Transporte público (bus).', value: 0.049 },
+                        { label: 'E) Auto compartido / taxi ocasional.', value: 0.09 },
+                    ]
+                },
+                {
+                    code: 'Transporte_05',
+                    text: '5. ¿Cuántos kilómetros (ida y vuelta) recorres al día para tu desplazamiento habitual?',
+                    options: [
+                        { label: 'A) 0–2 km.', value: 1 },
+                        { label: 'B) 3–10 km.', value: 6.5 },
+                        { label: 'C) 11–25 km.', value: 18 },
+                        { label: 'D) 26–50 km.', value: 38 },
+                        { label: 'E) >50 km.', value: 70 },
+                    ]
+                },
+                {
+                    code: 'Transporte_06',
+                    text: '6.¿Con qué frecuencia usas transporte público en la semana (sumando todos los viajes)?',
+                    options: [
+                        { label: 'A) Nunca.', value: 0 },
+                        { label: 'B) 1–2 viajes/semana.', value: 0.588 },
+                        { label: 'C) 3–7 viajes/semana.', value: 1.96 },
+                        { label: 'D) 8–20 viajes/semana.', value: 5.488 },
+                        { label: 'E) >20 viajes/semana.', value: 9.8 },
+                    ]
+                },
+                {
+                    code: 'Transporte_07',
+                    text: '7. ¿Sueles compartir vehículo (Uber, Didi, etc) o viajas solo en el automóvil?',
+                    options: [
+                        { label: 'A) Siempre comparto.', value: 5 },
+                        { label: 'B) A menudo comparto.', value: 4 },
+                        { label: 'C) A veces comparto.', value: 3 },
+                        { label: 'D) Casi siempre viajo solo.', value: 1 },
+                        { label: 'E) Siempre viajo solo.', value: 0 },
+                    ]
+                },
+                {
+                    code: 'Transporte_08',
+                    text: '8. ¿Con qué frecuencia realizas viajes largos en auto (fines de semana/escapadas) por mes?',
+                    options: [
+                        { label: 'A) 0 veces.', value: 0 },
+                        { label: 'B) 1 vez al mes.', value: 1 },
+                        { label: 'C) 2–3 veces al mes.', value: 2.5 },
+                        { label: 'D) 4–6 veces al mes.', value: 5 },
+                        { label: 'E) >6 veces al mes.', value: 8 },
+                    ]
+                },
+                {
+                    code: 'Transporte_09',
+                    text: '9. Para distancias cortas (<5 km), ¿qué eliges normalmente?',
+                    options: [
+                        { label: 'A) Caminar.', value: 5 },
+                        { label: 'B) Bicicleta / patín.', value: 4 },
+                        { label: 'C) Transporte público.', value: 3 },
+                        { label: 'D) Moto / scooter.', value: 1 },
+                        { label: 'E) Auto.', value: 0 },
+                    ]
+                },
+                {
+                    code: 'Transporte_10',
+                    text: '10. ¿Has tomado vuelos nacionales o internacionales en el último año?',
+                    options: [
+                        { label: 'A) Si', value: true },
+                        { label: 'B) No', value: false },
+                    ]
+                },
+                {
+                    code: 'Transporte_11',
+                    text: '11.	¿Cuánto tiempo duró ese vuelo?',
+                    options: [
+                        { label: 'A) Menos de 1 hora.', value: 102.2 },
+                        { label: 'B) 1–2 horas.', value: 306.6 },
+                        { label: 'C) 2-4 horas.', value: 613.2 },
+                        { label: 'D) 4–8 horas ', value: 1226.4 },
+                        { label: 'E) Más de 8 horas.', value: 1635.2 },
+                        { label: 'F) No tomé ningún vuelo.', value: 0 },
+                    ]
+                },
+                {
+                    code: 'Transporte_12',
+                    text: '12. ¿Con qué frecuencia realizas vuelos nacionales o internacionales al año de ese estilo    ?',
+                    options: [
+                        { label: 'A) 1 vuelo cada varios años.', value: 1 },
+                        { label: 'B) 1–2 vuelos al año.', value: 1.5 },
+                        { label: 'C) 3–5 vuelos al año.', value: 4 },
+                        { label: 'D) >5 vuelos al año.', value: 6.5 },
+                        { label: 'E) No suelo tomar vuelos.', value: 0 },
                     ]
                 },
             ]
