@@ -7,6 +7,11 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [huellaGlobal, setHuellaGlobal] = useState({
+    alimentos: 0,
+    transporte: 0,
+    estiloVida: 0
+  });
 
   useEffect(() => {
     const loadToken = async () => {
@@ -34,6 +39,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setAuthToken(null);
     setUserData(null);
+    setHuellaGlobal({ alimentos: 0, transporte: 0, estiloVida: 0 });
     await AsyncStorage.removeItem('authToken');
   };
 
@@ -42,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ authToken, userData, login, logout, updateUserData }}>
+    <AuthContext.Provider value={{ authToken, userData, huellaGlobal, login, logout, updateUserData, setHuellaGlobal }}>
       {children}
     </AuthContext.Provider>
   );

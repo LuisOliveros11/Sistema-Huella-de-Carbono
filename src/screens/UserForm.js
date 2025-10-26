@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+
 import {
     StyleSheet,
     View,
@@ -11,131 +12,225 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Bar } from 'react-native-progress';
 import { useNavigation } from '@react-navigation/native';
 import LogoSvg from '../icons/LogoSvg'
+import LifeStyleCategorySvg from '../icons/LifeStyleCategory';
+import TransportCategory from '../icons/TransportCategory';
 import { BASE_URL } from '../../config';
-
+import { AuthContext } from '../components/AuthContext';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-const UserForm = () => {
+const UserForm = ({ route }) => {
+    const category = route?.params?.category || 'Alimentos';
     const baseUrl = BASE_URL;
     const navigation = useNavigation();
+    const { authToken, userData, logout } = useContext(AuthContext);
 
-    const questions = [
-        { 
-            code: 'Alimentos_01', 
-            text: '1. ¿Con qué frecuencia consumes carne roja (res, cordero, cerdo)?', 
-            options: [
-                { label: 'A) Nunca / casi nunca.', value: 0 },
-                { label: 'B) 1 vez a la semana.', value: 42.68 },
-                { label: 'C) 2–3 veces por semana.', value: 106.7},
-                { label: 'D) 4–6 veces por semana.', value: 213.4 },
-                { label: 'E) Diariamente.', value: 298.76 }
+
+
+    const questions = category === 'Estilo de vida'
+        ? [
+            {
+                code: 'Vida_01',
+                text: '1. ¿Cuánto tiempo dedicas a hacer ejercicio a la semana?',
+                options: [
+                    { label: 'Nunca', value: 0 },
+                    { label: '1–2 veces', value: 10 },
+                    { label: '3–4 veces', value: 20 },
+                    { label: '5 o más veces', value: 30 },
+                ]
+            },
+            {
+                code: 'Vida_02',
+                text: '2. ¿Cuánto tiempo dedicas a actividades recreativas?',
+                options: [
+                    { label: 'Nada', value: 0 },
+                    { label: '1–2 horas', value: 10 },
+                    { label: '3–5 horas', value: 20 },
+                    { label: 'Más de 5 horas', value: 30 },
+                ]
+            },
+            {
+                code: 'Vida_03',
+                text: '3. ¿Cuántas horas de sueño promedio tienes por noche?',
+                options: [
+                    { label: 'Menos de 5 horas', value: 0 },
+                    { label: '5–6 horas', value: 10 },
+                    { label: '7–8 horas', value: 20 },
+                    { label: 'Más de 8 horas', value: 30 },
+                ]
+            },
+            {
+                code: 'Vida_04',
+                text: '4. ¿Con qué frecuencia participas en actividades sociales o reuniones con amigos?',
+                options: [
+                    { label: 'Nunca', value: 0 },
+                    { label: '1–2 veces al mes', value: 10 },
+                    { label: '1–2 veces por semana', value: 20 },
+                    { label: 'Más de 3 veces por semana', value: 30 },
+                ]
+            },
+            {
+                code: 'Vida_05',
+                text: '5. ¿Cuánto tiempo pasas frente a pantallas (TV, computadora, celular) diariamente?',
+                options: [
+                    { label: 'Más de 8 horas', value: 0 },
+                    { label: '5–8 horas', value: 10 },
+                    { label: '2–4 horas', value: 20 },
+                    { label: 'Menos de 2 horas', value: 30 },
+                ]
+            }
+        ]
+        : category === 'Transporte'
+            ? [
+                {
+                    code: 'Trans_01',
+                    text: '1. ¿Con qué frecuencia usas transporte público?',
+                    options: [
+                        { label: 'Nunca', value: 0 },
+                        { label: '1–2 veces por semana', value: 10 },
+                        { label: '3–4 veces por semana', value: 20 },
+                        { label: 'Diario', value: 30 },
+                    ]
+                },
+                {
+                    code: 'Trans_02',
+                    text: '2. ¿Con qué frecuencia usas vehículo propio?',
+                    options: [
+                        { label: 'Nunca', value: 0 },
+                        { label: '1–2 veces por semana', value: 10 },
+                        { label: '3–4 veces por semana', value: 20 },
+                        { label: 'Diario', value: 30 },
+                    ]
+                },
+                {
+                    code: 'Trans_03',
+                    text: '3. ¿Usas bicicleta o caminas regularmente?',
+                    options: [
+                        { label: 'Nunca', value: 0 },
+                        { label: '1–2 veces por semana', value: 10 },
+                        { label: '3–4 veces por semana', value: 20 },
+                        { label: 'Diario', value: 30 },
+                    ]
+                },
             ]
-        },
-        { 
-            code: 'Alimentos_02',
-            text: '2. ¿Con qué frecuencia consumes pollo o pavo?', 
-            options: [
-                { label: 'A) Nunca / casi nunca.', value: 0 },      
-                { label: 'B) 1 vez a la semana.', value: 7.28 },
-                { label: 'C) 2–3 veces por semana.', value: 18.2 },
-                { label: 'D) 4–6 veces por semana.', value: 36.4 },
-                { label: 'E) Diariamente.', value: 50.96 }
-            ],
-        },
-        { 
-            code: 'Alimentos_03',
-            text: '3. ¿Con qué frecuencia consumes pescado o mariscos?', 
-            options: [
-                { label: 'A) Nunca / casi nunca.', value: 0 },      
-                { label: 'B) 1 vez a la semana.', value: 5.36 },
-                { label: 'C) 2–3 veces por semana.', value: 13.4 },
-                { label: 'D) 4–6 veces por semana.', value: 26.8 },
-                { label: 'E) Diariamente.', value: 37.52 }
-            ],
-        },
-        { 
-            code: 'Alimentos_04',
-            text: '4. ¿Con qué frecuencia consumes productos lácteos (leche, queso, yogur)?', 
-            options: [
-                { label: 'A) Nunca / casi nunca.', value: 0 },      
-                { label: 'B) 1 vez a la semana.', value: 11.16 },
-                { label: 'C) 2–3 veces por semana.', value: 27.9 },
-                { label: 'D) 4–6 veces por semana.', value: 55.8 },
-                { label: 'E) Diariamente.', value: 78.12 }
-            ],
-        },
-        { 
-            code: 'Alimentos_05',
-            text: '5. ¿Cuánta comida de origen vegetal (frutas, verduras, legumbres, granos integrales) consumes?', 
-            options: [
-                { label: 'A) Nunca / casi nunca.', value: 0 },        
-                { label: 'B) 1–3 veces/semana.', value: 11.312 },
-                { label: 'C) 4–6 veces/semana.', value: 28.28 },
-                { label: 'D) A diario (una porción).', value: 39.592 },
-                { label: 'E) A diario (varias porciones).', value: 56.56 }
-            ],
-        },
-        { 
-            code: 'Alimentos_06',
-            text: '6. ¿Qué proporción de tus comidas son preparadas en casa frente a comida para llevar/restaurant?', 
-            options: [
-                { label: 'A) Casi todo en casa (≥90)', value: 16 },    
-                { label: 'B) Mayormente en casa (60–89%).', value: 48 },
-                { label: 'C) Mitad y mitad (40–59%).', value: 112 },
-                { label: 'D) Mayormente fuera (10–39%).', value: 160 },
-                { label: 'E) Casi siempre fuera / delivery (≤10% en casa).', value: 224 }
-            ],
-        },
-        { 
-            code: 'Alimentos_07',
-            text: '7. ¿Qué porcentaje aproximado de tus alimentos son procesados o ultraprocesados (comida rápida, snacks industriales)? ', 
-            options: [
-                { label: 'A) Muy poco (≤10%).', value: 2.69 },    
-                { label: 'B) Bajo (11–25%).', value: 8.07 },
-                { label: 'C) Moderado (26–50%).', value: 18.83 },
-                { label: 'D) Alto (51–75%).', value: 26.9 },
-                { label: 'E) Muy alto (>75%).', value: 37.66 }
-            ],
-        },
-        { 
-            code: 'Alimentos_08',
-            text: '8. ¿Compras principalmente alimentos locales/estacionales o importados/ fuera de temporada?', 
-            options: [
-                { label: 'A) Principalmente locales/estacionales', value: 1 },    
-                { label: 'B) Mayormente locales, algunos importados', value: 1.03 },
-                { label: 'C) Mitad y mitad.', value: 1.06 },
-                { label: 'D) Mayormente importados.', value: 1.10 },
-                { label: 'E) Principalmente importados/ultra procesados.', value: 1.25 }
-            ],
-        },
-        { 
-            code: 'Alimentos_09',
-            text: '9. ¿Con qué frecuencia desperdicias comida en casa (sobras que se tiran)?', 
-            options: [
-                { label: 'A) Casi nunca / siempre aprovecho.', value: 0 },    
-                { label: 'B) Rara vez (≤1 vez/semana).', value: 5 },
-                { label: 'C) Ocasionalmente (2–3 veces/semana).', value: 10 },
-                { label: 'D) Frecuentemente (4–6 veces/semana).', value: 20 },
-                { label: 'E) Muy frecuentemente (a diario).', value: 30 }
-            ],
-        },
-        { 
-            code: 'Alimentos_10',
-            text: '10. ¿Consumes productos orgánicos con frecuencia (si/no)?    ', 
-            options: [
-                { label: 'A) Casi todo orgánico.', value: 0.27 },    
-                { label: 'B) Mucho orgánico (≥50%).', value: 0.195 },
-                { label: 'C) Algo orgánico (20–49%).', value: 0.105 },
-                { label: 'D) Poco orgánico (1–19%). ', value: 0.03 },
-                { label: 'E) Nunca / no disponible.', value: 0 }
-            ],
-        },
-    ];
+            : [
+                {
+                    code: 'Alimentos_01',
+                    text: '1. ¿Con qué frecuencia consumes carne roja (res, cordero, cerdo)?',
+                    options: [
+                        { label: 'A) Nunca / casi nunca.', value: 0 },
+                        { label: 'B) 1 vez a la semana.', value: 42.68 },
+                        { label: 'C) 2–3 veces por semana.', value: 106.7 },
+                        { label: 'D) 4–6 veces por semana.', value: 213.4 },
+                        { label: 'E) Diariamente.', value: 298.76 }
+                    ]
+                },
+                {
+                    code: 'Alimentos_02',
+                    text: '2. ¿Con qué frecuencia consumes pollo o pavo?',
+                    options: [
+                        { label: 'A) Nunca / casi nunca.', value: 0 },
+                        { label: 'B) 1 vez a la semana.', value: 7.28 },
+                        { label: 'C) 2–3 veces por semana.', value: 18.2 },
+                        { label: 'D) 4–6 veces por semana.', value: 36.4 },
+                        { label: 'E) Diariamente.', value: 50.96 }
+                    ],
+                },
+                {
+                    code: 'Alimentos_03',
+                    text: '3. ¿Con qué frecuencia consumes pescado o mariscos?',
+                    options: [
+                        { label: 'A) Nunca / casi nunca.', value: 0 },
+                        { label: 'B) 1 vez a la semana.', value: 5.36 },
+                        { label: 'C) 2–3 veces por semana.', value: 13.4 },
+                        { label: 'D) 4–6 veces por semana.', value: 26.8 },
+                        { label: 'E) Diariamente.', value: 37.52 }
+                    ],
+                },
+                {
+                    code: 'Alimentos_04',
+                    text: '4. ¿Con qué frecuencia consumes productos lácteos (leche, queso, yogur)?',
+                    options: [
+                        { label: 'A) Nunca / casi nunca.', value: 0 },
+                        { label: 'B) 1 vez a la semana.', value: 11.16 },
+                        { label: 'C) 2–3 veces por semana.', value: 27.9 },
+                        { label: 'D) 4–6 veces por semana.', value: 55.8 },
+                        { label: 'E) Diariamente.', value: 78.12 }
+                    ],
+                },
+                {
+                    code: 'Alimentos_05',
+                    text: '5. ¿Cuánta comida de origen vegetal (frutas, verduras, legumbres, granos integrales) consumes?',
+                    options: [
+                        { label: 'A) Nunca / casi nunca.', value: 0 },
+                        { label: 'B) 1–3 veces/semana.', value: 11.312 },
+                        { label: 'C) 4–6 veces/semana.', value: 28.28 },
+                        { label: 'D) A diario (una porción).', value: 39.592 },
+                        { label: 'E) A diario (varias porciones).', value: 56.56 }
+                    ],
+                },
+                {
+                    code: 'Alimentos_06',
+                    text: '6. ¿Qué proporción de tus comidas son preparadas en casa frente a comida para llevar/restaurant?',
+                    options: [
+                        { label: 'A) Casi todo en casa (≥90)', value: 16 },
+                        { label: 'B) Mayormente en casa (60–89%).', value: 48 },
+                        { label: 'C) Mitad y mitad (40–59%).', value: 112 },
+                        { label: 'D) Mayormente fuera (10–39%).', value: 160 },
+                        { label: 'E) Casi siempre fuera / delivery (≤10% en casa).', value: 224 }
+                    ],
+                },
+                {
+                    code: 'Alimentos_07',
+                    text: '7. ¿Qué porcentaje aproximado de tus alimentos son procesados o ultraprocesados (comida rápida, snacks industriales)? ',
+                    options: [
+                        { label: 'A) Muy poco (≤10%).', value: 2.69 },
+                        { label: 'B) Bajo (11–25%).', value: 8.07 },
+                        { label: 'C) Moderado (26–50%).', value: 18.83 },
+                        { label: 'D) Alto (51–75%).', value: 26.9 },
+                        { label: 'E) Muy alto (>75%).', value: 37.66 }
+                    ],
+                },
+                {
+                    code: 'Alimentos_08',
+                    text: '8. ¿Compras principalmente alimentos locales/estacionales o importados/ fuera de temporada?',
+                    options: [
+                        { label: 'A) Principalmente locales/estacionales', value: 1 },
+                        { label: 'B) Mayormente locales, algunos importados', value: 1.03 },
+                        { label: 'C) Mitad y mitad.', value: 1.06 },
+                        { label: 'D) Mayormente importados.', value: 1.10 },
+                        { label: 'E) Principalmente importados/ultra procesados.', value: 1.25 }
+                    ],
+                },
+                {
+                    code: 'Alimentos_09',
+                    text: '9. ¿Con qué frecuencia desperdicias comida en casa (sobras que se tiran)?',
+                    options: [
+                        { label: 'A) Casi nunca / siempre aprovecho.', value: 0 },
+                        { label: 'B) Rara vez (≤1 vez/semana).', value: 5 },
+                        { label: 'C) Ocasionalmente (2–3 veces/semana).', value: 10 },
+                        { label: 'D) Frecuentemente (4–6 veces/semana).', value: 20 },
+                        { label: 'E) Muy frecuentemente (a diario).', value: 30 }
+                    ],
+                },
+                {
+                    code: 'Alimentos_10',
+                    text: '10. ¿Consumes productos orgánicos con frecuencia (si/no)?',
+                    options: [
+                        { label: 'A) Casi todo orgánico.', value: 0.27 },
+                        { label: 'B) Mucho orgánico (≥50%).', value: 0.195 },
+                        { label: 'C) Algo orgánico (20–49%).', value: 0.105 },
+                        { label: 'D) Poco orgánico (1–19%). ', value: 0.03 },
+                        { label: 'E) Nunca / no disponible.', value: 0 }
+                    ],
+                },
+            ];
+
 
     const [answers, setAnswers] = useState(Array(questions.length).fill(null));
     const [currentQuestion, setCurrentQuestion] = useState(0);
+    const { huellaGlobal, setHuellaGlobal } = useContext(AuthContext);
 
     const selectAnswer = (optionIndex) => {
         const option = questions[currentQuestion].options[optionIndex];
@@ -143,7 +238,7 @@ const UserForm = () => {
         newAnswers[currentQuestion] = {
             index: optionIndex,
             label: option.label,
-            value: option.value,     
+            value: option.value,
             code: questions[currentQuestion].code
         };
         setAnswers(newAnswers);
@@ -168,18 +263,40 @@ const UserForm = () => {
         }
     };
 
-    const nextQuestion = () => {
+    const nextQuestion = async () => {
         if (!answers[currentQuestion]) {
             Alert.alert('Atención', 'Selecciona una opción antes de continuar');
             return;
         }
+        if (category === 'Alimentos' && currentQuestion === questions.length - 1) {
+            const payload = {
+                user_id: userData.id,
+                responses: answers.map(a => ({
+                    code: a.code,
+                    optionIndex: a.index,
+                    label: a.label,
+                    value: a.value
+                }))
+            };
 
-        if (currentQuestion < questions.length - 1) {
-            setCurrentQuestion(currentQuestion + 1);
-            return;
+            try {
+                const resp = await fetch(`${baseUrl}/calcularHuellaAlimentos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!resp.ok) throw new Error('Error al calcular huella');
+                const data = await resp.json();
+                setHuellaGlobal(prev => ({ ...prev, alimentos: data.total_kgCO2e }));
+
+            } catch (err) {
+                console.error(err);
+                Alert.alert('Error', 'No se pudo calcular la huella de alimentos');
+                return; // Salimos para no avanzar si hay error
+            }
         }
 
-        const userId = 123; 
+        const userId = userData.id;
         const responsesPayload = answers.map(a => {
             if (!a) return null;
             return {
@@ -195,7 +312,32 @@ const UserForm = () => {
             responses: responsesPayload
         };
 
-        sendResponsesToApi(payload);
+        // Mostrar la suma en la última pregunta de transporte
+        if (category === 'Transporte' && currentQuestion === questions.length - 1) {
+            Alert.alert(
+                'Tu huella total',
+                `Huella de alimentos: ${huellaGlobal.alimentos} kgCO2e\nTotal actual: ${huellaGlobal.alimentos} kgCO2e`
+            );
+            console.log("aa")
+            return;
+        }
+
+        // Navegación entre categorías
+        if (currentQuestion < questions.length - 1) {
+            setCurrentQuestion(currentQuestion + 1);
+            return;
+        }
+        if (currentQuestion === questions.length - 1 && category === 'Estilo de vida') {
+            navigation.navigate('NextCategory', { category: 'Transporte' });
+            return;
+        }
+        if (currentQuestion === questions.length - 1) {
+            navigation.navigate('NextCategory');
+            return;
+        }
+
+
+
     };
 
     const progress = (currentQuestion) / questions.length;
@@ -204,26 +346,31 @@ const UserForm = () => {
         <SafeAreaProvider style={{ flex: 1, backgroundColor: '#e8ecf4' }} >
             <View style={styles.container}>
                 <View style={styles.progressContainer}>
-                    <Bar 
-                        progress={progress} width={screenWidth - 48} 
-                        height={screenHeight * .020} 
+                    <Bar
+                        progress={progress} width={screenWidth - 48}
+                        height={screenHeight * .020}
                         borderRadius={16}
                         color='#66DB00'
                         backgroundColor="#D2D1D1"
-                        borderColor='#D2D1D1'  
+                        borderColor='#D2D1D1'
                     />
-                    <Text style={styles.progressText}>{Math.round(progress * 100)}%</Text>     
+                    <Text style={styles.progressText}>{Math.round(progress * 100)}%</Text>
                 </View>
                 <Text style={styles.title}>Contesta las preguntas</Text>
                 <View style={styles.iconsContainer}>
                     <View style={styles.iconItem}>
-                        <LogoSvg width={screenWidth * 0.34} height={150} />
+                        {category === 'Estilo de vida'
+                            ? <LifeStyleCategorySvg width={screenWidth * 0.34} height={150} />
+                            : category === 'Transporte'
+                                ? <TransportCategory width={screenWidth * 0.34} height={190} />
+                                : <LogoSvg width={screenWidth * 0.34} height={150} />
+                        }
                     </View>
                 </View>
 
                 <Text style={styles.questionText}>{questions[currentQuestion].text}</Text>
 
-               {questions[currentQuestion].options.map((opt, index) => (
+                {questions[currentQuestion].options.map((opt, index) => (
                     <TouchableOpacity key={index} onPress={() => selectAnswer(index)} style={styles.checkboxContainer}>
                         <View style={[styles.circle, answers[currentQuestion]?.index === index && styles.checked]}>
                             {answers[currentQuestion]?.index === index && <View style={styles.innerCircle} />}
@@ -235,7 +382,12 @@ const UserForm = () => {
                 <TouchableOpacity onPress={nextQuestion}>
                     <View style={styles.btn}>
                         <Text style={styles.btnText}>
-                            {currentQuestion < questions.length - 1 ? 'Siguiente' : 'Enviar'}
+                            {currentQuestion < questions.length - 1
+                                ? 'Siguiente'
+                                : category === 'Transporte'
+                                    ? 'Enviar'
+                                    : 'Siguiente categoría'
+                            }
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -272,9 +424,9 @@ const styles = StyleSheet.create({
         fontWeight: '700'
     },
     iconsContainer: {
-        justifyContent: 'space-between', 
-        alignItems: 'center',      
-        marginTop: 20,       
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 20,
     },
     iconItem: {
         alignItems: 'center',
@@ -309,7 +461,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#66DB00',
     },
     checkboxText: {
-        marginLeft: 10, 
+        marginLeft: 10,
         fontSize: 14,
     },
     btn: {
