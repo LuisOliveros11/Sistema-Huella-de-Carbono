@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 import {
     StyleSheet,
@@ -31,7 +31,7 @@ const UserForm = ({ route }) => {
     const questions = category === 'Estilo de vida'
         ? [
             {
-                code: 'EstiloVida_01',
+                code: 'EstVida_01',
                 text: '1. ¿Cuánto pagas aproximadamente de luz cada mes?',
                 options: [
                     { label: 'A) Menos de $150 MXN/mes.', value: 41 },
@@ -42,7 +42,7 @@ const UserForm = ({ route }) => {
                 ]
             },
             {
-                code: 'EstiloVida_02',
+                code: 'EstVida_02',
                 text: '2. ¿Tu vivienda usa calefacción o aire acondicionado con frecuencia?',
                 options: [
                     { label: 'A) No uso ninguno.', value: 5 },
@@ -53,7 +53,7 @@ const UserForm = ({ route }) => {
                 ]
             },
             {
-                code: 'EstiloVida_03',
+                code: 'EstVida_03',
                 text: '3. ¿Utilizas energías renovables (paneles solares, proveedor verde) en tu hogar?',
                 options: [
                     { label: 'A) Sí, completamente (paneles o 100% proveedor verde)', value: 5 },
@@ -64,7 +64,7 @@ const UserForm = ({ route }) => {
                 ]
             },
             {
-                code: 'EstiloVida_04',
+                code: 'EstVida_04',
                 text: '4. ¿Cuántas duchas de 5–10 minutos tomas al día en promedio?',
                 options: [
                     { label: 'A) 1 ducha corta.', value: 0.295 },
@@ -74,7 +74,7 @@ const UserForm = ({ route }) => {
                 ]
             },
             {
-                code: 'EstiloVida_05',
+                code: 'EstVida_05',
                 text: '5. ¿Reciclas y separas residuos en tu hogar con regularidad?',
                 options: [
                     { label: 'A) Sí, siempre y correctamente.', value: 5 },
@@ -85,7 +85,7 @@ const UserForm = ({ route }) => {
                 ]
             },
             {
-                code: 'EstiloVida_06',
+                code: 'EstVida_06',
                 text: '6. ¿Con qué frecuencia compras ropa nueva?',
                 options: [
                     { label: 'A) Casi nunca, compro ropa de calidad y duradera.', value: 0.5875 },
@@ -96,7 +96,7 @@ const UserForm = ({ route }) => {
                 ]
             },
             {
-                code: 'EstiloVida_07',
+                code: 'EstVida_07',
                 text: '7. ¿Qué tan seguido realizas mantenimiento para eficiencia energética en tu hogar (aislamiento, sellado, bombillas LED)?',
                 options: [
                     { label: 'A) Regularmente (cada año).', value: 5 },
@@ -107,7 +107,7 @@ const UserForm = ({ route }) => {
                 ]
             },
             {
-                code: 'EstiloVida_08',
+                code: 'EstVida_08',
                 text: '8. ¿Con qué frecuencia compras productos nuevos (electrónicos, electrodomésticos) en un año?',
                 options: [
                     { label: 'A) Casi nunca (0–1).', value: 8.3 },
@@ -118,7 +118,7 @@ const UserForm = ({ route }) => {
                 ]
             },
             {
-                code: 'EstiloVida_09',
+                code: 'EstVida_09',
                 text: '9. ¿Trabajas desde casa (HomeOffice) cuántos días a la semana en promedio?',
                 options: [
                     { label: 'A) 5 días (completamente remoto).', value: 5 },
@@ -129,7 +129,7 @@ const UserForm = ({ route }) => {
                 ]
             },
             {
-                code: 'EstiloVida_10',
+                code: 'EstVida_10',
                 text: '10. ¿Participas activamente en prácticas de consumo responsable (segunda mano, reparar antes de reemplazar, préstamos/trueque)?',
                 options: [
                     { label: 'A) Sí, siempre.', value: 5 },
@@ -418,6 +418,9 @@ const UserForm = ({ route }) => {
             Alert.alert('Error', 'No se pudo enviar el cuestionario. Revisa la conexión.');
         }
     };
+    useEffect(() => {
+        console.log("Huella global actualizada:", huellaGlobal);
+    }, [huellaGlobal]);
 
     const nextQuestion = async () => {
         if (!answers[currentQuestion]) {
@@ -438,12 +441,16 @@ const UserForm = ({ route }) => {
             try {
                 const resp = await fetch(`${baseUrl}/calcularHuellaAlimentos`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
                     body: JSON.stringify(payload)
                 });
                 if (!resp.ok) throw new Error('Error al calcular huella');
                 const data = await resp.json();
                 setHuellaGlobal(prev => ({ ...prev, alimentos: data.total_kgCO2e }));
+
 
             } catch (err) {
                 console.error(err);
@@ -451,6 +458,37 @@ const UserForm = ({ route }) => {
                 return; // Salimos para no avanzar si hay error
             }
         }
+        if (category === 'Estilo de vida' && currentQuestion === questions.length - 1) {
+            const payload = {
+                user_id: userData.id,
+                responses: answers.map(a => ({
+                    code: a.code,
+                    optionIndex: a.index,
+                    label: a.label,
+                    value: a.value
+                }))
+            };
+
+            try {
+                const resp = await fetch(`${baseUrl}/calcularHuellaEstiloVida`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+                if (!resp.ok) throw new Error('Error al calcular huella');
+                const data = await resp.json();
+                setHuellaGlobal(prev => ({ ...prev, estiloVida: data.total_kgCO2e }));
+
+            } catch (err) {
+                console.error(err);
+                Alert.alert('Error', 'No se pudo calcular la huella de alimentos');
+                return; // Salimos para no avanzar si hay error
+            }
+        }
+
 
         const userId = userData.id;
         const responsesPayload = answers.map(a => {
@@ -463,20 +501,64 @@ const UserForm = ({ route }) => {
             };
         }).filter(Boolean);
 
-        const payload = {
-            user_id: userId,
-            responses: responsesPayload
-        };
+
 
         // Mostrar la suma en la última pregunta de transporte
-        if (category === 'Transporte' && currentQuestion === questions.length - 1) {
-            Alert.alert(
-                'Tu huella total',
-                `Huella de alimentos: ${huellaGlobal.alimentos} kgCO2e\nTotal actual: ${huellaGlobal.alimentos} kgCO2e`
-            );
-            console.log("aa")
-            return;
-        }
+      if (category === 'Transporte' && currentQuestion === questions.length - 1) {
+    const payload = {
+        user_id: userData.id,
+        responses: answers.map(a => ({
+            code: a.code,
+            optionIndex: a.index,
+            label: a.label,
+            value: a.value
+        }))
+    };
+
+    try {
+        const resp = await fetch(`${baseUrl}/calcularHuellaTransporte`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify(payload)
+        });
+        if (!resp.ok) throw new Error('Error al calcular huella');
+        const data = await resp.json();
+
+        setHuellaGlobal(prev => {
+            const updated = { ...prev, transporte: data.total_kgCO2e };
+
+            //Mostrar el alert **solo cuando ya tenemos las 3 categorías**
+            if (
+                updated.alimentos !== null &&
+                updated.estiloVida !== null &&
+                updated.transporte !== null
+            ) {
+                const total =
+                    updated.alimentos +
+                    updated.estiloVida +
+                    updated.transporte;
+                Alert.alert(
+                    'Tu huella total',
+                    `Huella de alimentos: ${updated.alimentos} kgCO2e\n` +
+                    `Huella de estilo de vida: ${updated.estiloVida} kgCO2e\n` +
+                    `Huella de transporte: ${updated.transporte} kgCO2e\n\n` +
+                    `Total: ${total.toFixed(2)} kgCO2e`
+                );
+            }
+
+            return updated;
+        });
+
+    } catch (err) {
+        console.error(err);
+        return;
+    }
+
+    return;
+}
 
         // Navegación entre categorías
         if (currentQuestion < questions.length - 1) {
