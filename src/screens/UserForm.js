@@ -16,6 +16,8 @@ import LifeStyleCategorySvg from '../icons/LifeStyleCategory';
 import TransportCategory from '../icons/TransportCategory';
 import { BASE_URL } from '../../config';
 import { AuthContext } from '../components/AuthContext';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
+
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -540,13 +542,23 @@ const UserForm = ({ route }) => {
                     updated.alimentos +
                     updated.estiloVida +
                     updated.transporte;
-                Alert.alert(
+               
+                Dialog.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: 'Datos registrados',
+                    textBody: data.message,
+                    autoClose: 800,
+                    onHide: () => {
+                        navigation.navigate('UserStatistics');
+                    },
+                });  
+                /*Alert.alert(
                     'Tu huella total',
                     `Huella de alimentos: ${updated.alimentos} kgCO2e\n` +
                     `Huella de estilo de vida: ${updated.estiloVida} kgCO2e\n` +
                     `Huella de transporte: ${updated.transporte} kgCO2e\n\n` +
                     `Total: ${total.toFixed(2)} kgCO2e`
-                );
+                );*/
             }
 
             return updated;

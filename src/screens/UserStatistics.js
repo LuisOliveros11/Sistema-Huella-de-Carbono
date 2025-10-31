@@ -7,7 +7,9 @@ import {
     TouchableOpacity,
     TextInput,
     Dimensions,
-    ScrollView
+    ScrollView,
+    useCallback,
+    BackHandler
 } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -18,7 +20,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { PieChart } from "react-native-gifted-charts";
 
 import {
-    useNavigation,
+    useNavigation, useFocusEffect
 } from '@react-navigation/native';
 import { User } from 'react-feather';
 //import { AuthContext } from '../Components/AuthContext';
@@ -41,10 +43,34 @@ const donutData = [
         value: 50,
         color: '#F5782A',
     },
-    {value: 50, color: '#3686FF'},
+    { value: 50, color: '#3686FF' },
 ];
 const UserStatistics = () => {
     const navigation = useNavigation();
+    useFocusEffect(
+        React.useCallback(() => {
+            const onBackPress = () => {
+                navigation.navigate("Tabs", { screen: "Home" });
+                return true;
+            };
+
+            const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+            return () => subscription.remove();
+        }, [navigation])
+    );
+     React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableOpacity
+                    onPress={() => navigation.navigate("Tabs", { screen: "Home" })}
+                    style={{ marginLeft: 10 }}
+                >
+                    <Ionicons name="arrow-back" size={24} color="white" />
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation]);
     //const { login } = useContext(AuthContext);
     //const baseUrl = BASE_URL;
 
@@ -113,20 +139,20 @@ const UserStatistics = () => {
                             </View>
                         </View>
                     </View>
-                    <Text style={[styles.title, {marginTop: 30}]}>Comparación con promedio de México</Text>
+                    <Text style={[styles.title, { marginTop: 30 }]}>Comparación con promedio de México</Text>
                     <View style={styles.donutChartContainer}>
                         <View style={styles.donutItem}>
                             <View style={styles.donutData}>
-                                 <View style={styles.leftGroup}>
-                                    <View style={[styles.circleColor, {backgroundColor: '#F5782A'}]}></View>
+                                <View style={styles.leftGroup}>
+                                    <View style={[styles.circleColor, { backgroundColor: '#F5782A' }]}></View>
                                     <Text style={styles.dataLabel}>50%</Text>
                                 </View>
 
                                 <View style={styles.rightGroup}>
-                                    <View style={[styles.circleColor, {backgroundColor: '#3686FF'}]}></View>
+                                    <View style={[styles.circleColor, { backgroundColor: '#3686FF' }]}></View>
                                     <Text style={styles.dataLabel}>50%</Text>
                                 </View>
-                                
+
                             </View>
                             <PieChart
                                 data={donutData}
@@ -137,29 +163,29 @@ const UserStatistics = () => {
                                 innerCircleColor={'#ffffffff'}
                                 centerLabelComponent={() => {
                                     return (
-                                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                                        <Text
-                                        style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>
-                                        50%
-                                        </Text>
-                                        <Text style={{fontSize: 10, color: 'black'}}>Alimentos</Text>
-                                    </View>
+                                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text
+                                                style={{ fontSize: 15, color: 'black', fontWeight: 'bold' }}>
+                                                50%
+                                            </Text>
+                                            <Text style={{ fontSize: 10, color: 'black' }}>Alimentos</Text>
+                                        </View>
                                     );
                                 }}
                             />
                         </View>
-                          <View style={styles.donutItem}>
+                        <View style={styles.donutItem}>
                             <View style={styles.donutData}>
-                                 <View style={styles.leftGroup}>
-                                    <View style={[styles.circleColor, {backgroundColor: '#F5782A'}]}></View>
+                                <View style={styles.leftGroup}>
+                                    <View style={[styles.circleColor, { backgroundColor: '#F5782A' }]}></View>
                                     <Text style={styles.dataLabel}>50%</Text>
                                 </View>
 
                                 <View style={styles.rightGroup}>
-                                    <View style={[styles.circleColor, {backgroundColor: '#3686FF'}]}></View>
+                                    <View style={[styles.circleColor, { backgroundColor: '#3686FF' }]}></View>
                                     <Text style={styles.dataLabel}>50%</Text>
                                 </View>
-                                
+
                             </View>
                             <PieChart
                                 data={donutData}
@@ -170,29 +196,29 @@ const UserStatistics = () => {
                                 innerCircleColor={'#ffffffff'}
                                 centerLabelComponent={() => {
                                     return (
-                                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                                        <Text
-                                        style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>
-                                        50%
-                                        </Text>
-                                        <Text style={{fontSize: 10, color: 'black'}}>Estilo de vida</Text>
-                                    </View>
+                                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text
+                                                style={{ fontSize: 15, color: 'black', fontWeight: 'bold' }}>
+                                                50%
+                                            </Text>
+                                            <Text style={{ fontSize: 10, color: 'black' }}>Estilo de vida</Text>
+                                        </View>
                                     );
                                 }}
                             />
                         </View>
-                          <View style={styles.donutItem}>
+                        <View style={styles.donutItem}>
                             <View style={styles.donutData}>
-                                 <View style={styles.leftGroup}>
-                                    <View style={[styles.circleColor, {backgroundColor: '#F5782A'}]}></View>
+                                <View style={styles.leftGroup}>
+                                    <View style={[styles.circleColor, { backgroundColor: '#F5782A' }]}></View>
                                     <Text style={styles.dataLabel}>50%</Text>
                                 </View>
 
                                 <View style={styles.rightGroup}>
-                                    <View style={[styles.circleColor, {backgroundColor: '#3686FF'}]}></View>
+                                    <View style={[styles.circleColor, { backgroundColor: '#3686FF' }]}></View>
                                     <Text style={styles.dataLabel}>50%</Text>
                                 </View>
-                                
+
                             </View>
                             <PieChart
                                 data={donutData}
@@ -203,61 +229,61 @@ const UserStatistics = () => {
                                 innerCircleColor={'#ffffffff'}
                                 centerLabelComponent={() => {
                                     return (
-                                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                                        <Text
-                                        style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>
-                                        50%
-                                        </Text>
-                                        <Text style={{fontSize: 10, color: 'black'}}>Transporte</Text>
-                                    </View>
+                                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text
+                                                style={{ fontSize: 15, color: 'black', fontWeight: 'bold' }}>
+                                                50%
+                                            </Text>
+                                            <Text style={{ fontSize: 10, color: 'black' }}>Transporte</Text>
+                                        </View>
                                     );
                                 }}
                             />
-                        </View>  
+                        </View>
                     </View>
-                    <Text style={[styles.title, {marginTop: 30}]}>Tus recomendaciones</Text>
+                    <Text style={[styles.title, { marginTop: 30 }]}>Tus recomendaciones</Text>
                     <View style={styles.recommendationLabelCircle}>
                         <View style={styles.recommendationItem}>
-                            <View style={[styles.circleColor, {width: 24, height: 24, borderRadius: 12, backgroundColor: '#FF0000'}]}></View>
+                            <View style={[styles.circleColor, { width: 24, height: 24, borderRadius: 12, backgroundColor: '#FF0000' }]}></View>
                             <Text style={styles.recommendationLabel}>Escenciales</Text>
                         </View>
 
                         <View style={styles.recommendationItem}>
-                            <View style={[styles.circleColor, {width: 24, height: 24, borderRadius: 12, backgroundColor: '#FF6A00'}]}></View>
+                            <View style={[styles.circleColor, { width: 24, height: 24, borderRadius: 12, backgroundColor: '#FF6A00' }]}></View>
                             <Text style={styles.recommendationLabel}>Importantes</Text>
                         </View>
 
                         <View style={styles.recommendationItem}>
-                            <View style={[styles.circleColor, {width: 24, height: 24, borderRadius: 12, backgroundColor: '#1EFF00'}]}></View>
+                            <View style={[styles.circleColor, { width: 24, height: 24, borderRadius: 12, backgroundColor: '#1EFF00' }]}></View>
                             <Text style={styles.recommendationLabel}>Consideralo</Text>
                         </View>
                     </View>
                     <LinearGradient
-                                colors={['#FF0000', '#503B3B']}
-                                start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 0 }}
-                                style={styles.recommendation}
-                            >
-                                <Text style={{fontSize: 14, fontWeight: 600, padding: 10, color: 'white'}}>Titulo</Text>
-                                <Text style={styles.recommendationText}>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </Text>
+                        colors={['#FF0000', '#503B3B']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={styles.recommendation}
+                    >
+                        <Text style={{ fontSize: 14, fontWeight: 600, padding: 10, color: 'white' }}>Titulo</Text>
+                        <Text style={styles.recommendationText}>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </Text>
                     </LinearGradient>
                     <LinearGradient
-                                colors={['#FF6A00', '#503B3B']}
-                                start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 0 }}
-                                style={styles.recommendation}
-                            >
-                                <Text style={{fontSize: 14, fontWeight: 600, padding: 10, color: 'white'}}>Titulo</Text>
-                                <Text style={styles.recommendationText}>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </Text>
+                        colors={['#FF6A00', '#503B3B']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={styles.recommendation}
+                    >
+                        <Text style={{ fontSize: 14, fontWeight: 600, padding: 10, color: 'white' }}>Titulo</Text>
+                        <Text style={styles.recommendationText}>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </Text>
                     </LinearGradient>
-                     <LinearGradient
-                                colors={['#1EFF00', '#503B3B']}
-                                start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 0 }}
-                                style={styles.recommendation}
-                            >
-                                <Text style={{fontSize: 14, fontWeight: 600, padding: 10, color: 'white'}}>Titulo</Text>
-                                <Text style={styles.recommendationText}>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </Text>
+                    <LinearGradient
+                        colors={['#1EFF00', '#503B3B']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={styles.recommendation}
+                    >
+                        <Text style={{ fontSize: 14, fontWeight: 600, padding: 10, color: 'white' }}>Titulo</Text>
+                        <Text style={styles.recommendationText}>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </Text>
                     </LinearGradient>
                 </ScrollView>
             </View>
@@ -277,7 +303,7 @@ const styles = StyleSheet.create({
     headerImg: {
         width: '100%',
         height: '100%',
-        resizeMode: 'cover', 
+        resizeMode: 'cover',
     },
     container: {
         padding: 24,
@@ -292,11 +318,11 @@ const styles = StyleSheet.create({
         fontWeight: 700
     },
     cardsContainer: {
-        flexDirection: 'row',     
-        justifyContent: 'space-between', 
-        marginTop: 20, 
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
     },
-    
+
     cardItem: {
         height: screenHeight * .145,
         width: screenWidth * .48,
@@ -339,41 +365,41 @@ const styles = StyleSheet.create({
         color: '#20D30F',
     },
     pieContainer: {
-        flexDirection: 'row',      
-        alignItems: 'center',      
-        justifyContent: 'flex-start', 
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
         marginTop: 20,
     },
     labelRow: {
-        flexDirection: 'row',     
-        alignItems: 'center',     
-        marginVertical: 5,        
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 5,
     },
 
     circleCategory: {
         height: 20,
         width: 20,
-        borderRadius: 10,          
-        marginRight: 8,            
+        borderRadius: 10,
+        marginRight: 8,
     },
     labelsContainer: {
-        marginLeft: 20,             
-        justifyContent: 'space-between', 
-        height: pieChartRadius * 2, 
+        marginLeft: 20,
+        justifyContent: 'space-between',
+        height: pieChartRadius * 2,
     },
-    
+
 
     label: {
         fontSize: 12,
         fontWeight: '600',
         color: '#000',
-        marginVertical: 5,       
+        marginVertical: 5,
     },
     donutChartContainer: {
-        flexDirection: 'row',     
-        justifyContent: 'space-between', 
-        alignItems: 'center',      
-        marginTop: 20,       
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 20,
     },
     donutData: {
         flexDirection: 'row',
@@ -403,7 +429,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginLeft: screenWidth * 0.05,
-        marginRight: 10,    
+        marginRight: 10,
     },
     recommendationLabelCircle: {
         marginTop: 20,
@@ -430,7 +456,7 @@ const styles = StyleSheet.create({
     },
     recommendation: {
         marginTop: 25,
-        width:  screenWidth - 52,
+        width: screenWidth - 52,
         height: 140,
         borderRadius: 20
 
