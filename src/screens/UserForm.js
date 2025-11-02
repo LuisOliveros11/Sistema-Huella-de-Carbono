@@ -506,71 +506,83 @@ const UserForm = ({ route }) => {
 
 
         // Mostrar la suma en la última pregunta de transporte
-      if (category === 'Transporte' && currentQuestion === questions.length - 1) {
-    const payload = {
-        user_id: userData.id,
-        responses: answers.map(a => ({
-            code: a.code,
-            optionIndex: a.index,
-            label: a.label,
-            value: a.value
-        }))
-    };
+        if (category === 'Transporte' && currentQuestion === questions.length - 1) {
+            const payload = {
+                user_id: userData.id,
+                responses: answers.map(a => ({
+                    code: a.code,
+                    optionIndex: a.index,
+                    label: a.label,
+                    value: a.value
+                }))
+            };
 
-    try {
-        const resp = await fetch(`${baseUrl}/calcularHuellaTransporte`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`
-            },
-            body: JSON.stringify(payload)
-        });
-        if (!resp.ok) throw new Error('Error al calcular huella');
-        const data = await resp.json();
-
-        setHuellaGlobal(prev => {
-            const updated = { ...prev, transporte: data.total_kgCO2e };
-
-            //Mostrar el alert **solo cuando ya tenemos las 3 categorías**
-            if (
-                updated.alimentos !== null &&
-                updated.estiloVida !== null &&
-                updated.transporte !== null
-            ) {
-                const total =
-                    updated.alimentos +
-                    updated.estiloVida +
-                    updated.transporte;
-               
-                Dialog.show({
-                    type: ALERT_TYPE.SUCCESS,
-                    title: 'Datos registrados',
-                    textBody: data.message,
-                    autoClose: 800,
-                    onHide: () => {
-                        navigation.navigate('UserStatistics');
+            try {
+                const resp = await fetch(`${baseUrl}/calcularHuellaTransporte`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
                     },
-                });  
-                /*Alert.alert(
-                    'Tu huella total',
-                    `Huella de alimentos: ${updated.alimentos} kgCO2e\n` +
-                    `Huella de estilo de vida: ${updated.estiloVida} kgCO2e\n` +
-                    `Huella de transporte: ${updated.transporte} kgCO2e\n\n` +
-                    `Total: ${total.toFixed(2)} kgCO2e`
-                );*/
+                    body: JSON.stringify(payload)
+                });
+                if (!resp.ok) throw new Error('Error al calcular huella');
+                const data = await resp.json();
+
+                setHuellaGlobal(prev => {
+                    const updated = { ...prev, transporte: data.total_kgCO2e };
+
+                    //Mostrar el alert **solo cuando ya tenemos las 3 categorías**
+                    if (
+                        updated.alimentos !== null &&
+                        updated.estiloVida !== null &&
+                        updated.transporte !== null
+                    ) {
+                        var myHeaders = new Headers();
+                        myHeaders.append("Authorization", `Bearer ${authToken}`);
+
+                        var requestOptions = {
+                            method: 'POST',
+                            headers: myHeaders,
+                            redirect: 'follow'
+                        };
+
+                        fetch(`${baseUrl}/generarRecomendaciones/${userData.id}`, requestOptions)
+                            .then(response => response.text())
+                            .catch(error => console.log('error', error));
+                        const total =
+                            updated.alimentos +
+                            updated.estiloVida +
+                            updated.transporte;
+
+                        Dialog.show({
+                            type: ALERT_TYPE.SUCCESS,
+                            title: 'Datos registrados',
+                            textBody: data.message,
+                            autoClose: 800,
+                            onHide: () => {
+                                navigation.navigate('UserStatistics');
+                            },
+                        });
+                        /*Alert.alert(
+                            'Tu huella total',
+                            `Huella de alimentos: ${updated.alimentos} kgCO2e\n` +
+                            `Huella de estilo de vida: ${updated.estiloVida} kgCO2e\n` +
+                            `Huella de transporte: ${updated.transporte} kgCO2e\n\n` +
+                            `Total: ${total.toFixed(2)} kgCO2e`
+                        );*/
+                    }
+
+                    return updated;
+                });
+
+            } catch (err) {
+                console.error(err);
+                return;
             }
 
-            return updated;
-        });
-
-    } catch (err) {
-        console.error(err);
-        return;
-    }
-
-    return;
-}
+            return;
+        }
 
         // Navegación entre categorías
         if (currentQuestion < questions.length - 1) {

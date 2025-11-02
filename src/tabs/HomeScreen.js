@@ -1,4 +1,5 @@
 import { StyleSheet, View, Text, ScrollView, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -6,76 +7,113 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { AuthContext } from '../components/AuthContext';
+import { BASE_URL } from '../../config';
+
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const cardWidth = screenWidth - 32;
 
 const HomeScreen = () => {
-  /*if (loading) {
+
+  const navigation = useNavigation();
+  const [hasForm, setHasForm] = useState([false]);
+  const [loading, setLoading] = useState(true);
+  const { authToken, userData } = useContext(AuthContext);
+  const baseUrl = BASE_URL;
+
+
+  useEffect(() => {
+    getData();
+
+  }, []);
+  async function getData() {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${authToken}`);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+
+    try {
+      const response = await fetch(`${baseUrl}/obtenerHuellaCarbono/${userData.id}`, requestOptions);
+      const data = await response.json();
+      if (data && data.breakdown && data.breakdown.length > 0) {
+        setHasForm(true);
+      } else {
+        setHasForm(false);
+      }
+
+    } catch (error) {
+      console.log('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+  if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaProvider style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#075eec" />
           <Text style={styles.loadingText}>Cargando datos...</Text>
         </View>
-      </SafeAreaView>
+      </SafeAreaProvider>
     );
-  }*/
- const navigation = useNavigation();
- 
-
+  }
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-    <SafeAreaProvider style={styles.container}>
+      <SafeAreaProvider style={styles.container}>
         <Text style={styles.title}>Contesta el cuestionario</Text>
-        <View style={[styles.card, {backgroundColor: "#96D55F"}]}>
-            <View style={{marginTop: screenHeight * 0.01}}>
-              <View style={[styles.horizontalContainer, { justifyContent: 'space-between'}]}>
-                <FontAwesome5 style={{paddingHorizontal: '5%'}} name="file-contract" size={118} color="white" />
-                <FontAwesome style={{paddingHorizontal: '11.5%'}} name="tree" size={60} color="white" />
-              </View>
-              <Text style={styles.cardText}>Calcula tu impacto ambiental</Text>
-              <View style={[styles.horizontalContainer, { justifyContent: 'space-between'}]}>
-                <Text style={[styles.cardText, {fontWeight: 300, fontSize: 11}]}>Contesta las preguntas del formulario para conocer tu huella de carbono</Text>
-                <TouchableOpacity
-                  onPress={async () => {
-                    navigation.navigate('UserFormPreview');
-                  }}>
-                  <View style={[styles.cardButton, {paddingHorizontal: '16%'}]}>
-                    <Text style={[styles.cardButtonText, {color: "#52C94B"}]}>Iniciar</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+        <View style={[styles.card, { backgroundColor: "#96D55F" }]}>
+          <View style={{ marginTop: screenHeight * 0.01 }}>
+            <View style={[styles.horizontalContainer, { justifyContent: 'space-between' }]}>
+              <FontAwesome5 style={{ paddingHorizontal: '5%' }} name="file-contract" size={118} color="white" />
+              <FontAwesome style={{ paddingHorizontal: '11.5%' }} name="tree" size={60} color="white" />
             </View>
-        </View>
-
-        <Text style={styles.title}>Conoce tus estadísticas</Text>
-        <View style={[styles.card, {backgroundColor: "#79A4FF"}]}>
-          <View style={{marginTop: screenHeight * 0.02}}>
-            <View style={[styles.horizontalContainer, { justifyContent: 'space-between'}]}>
-              <Ionicons style={{paddingHorizontal: '5%'}} name="stats-chart" size={105} color="white" />
-              <FontAwesome style={{paddingHorizontal: '7.5%'}} name="line-chart" size={70} color="white" />
-            </View>
-            <Text style={[styles.cardText, {width: screenWidth * .60}]}>Tus sugerencias personalizadas</Text>
-            <View style={[styles.horizontalContainer, { justifyContent: 'space-between'}]}>
-              <Text style={[styles.cardText, {fontWeight: 300, fontSize: 11}]}>Consulta tu nivel de huella de carbono y conoce en qué debes mejorar</Text>
+            <Text style={styles.cardText}>Calcula tu impacto ambiental</Text>
+            <View style={[styles.horizontalContainer, { justifyContent: 'space-between' }]}>
+              <Text style={[styles.cardText, { fontWeight: 300, fontSize: 11 }]}>Contesta las preguntas del formulario para conocer tu huella de carbono</Text>
               <TouchableOpacity
                 onPress={async () => {
-                  navigation.navigate('UserStatistics');
+                  navigation.navigate('UserFormPreview');
                 }}>
-                <View style={[styles.cardButton, {paddingHorizontal: '16%'}]}>
-                  <Text style={[styles.cardButtonText, {fontSize: 11}]}>Consultar</Text>
+                <View style={[styles.cardButton, { paddingHorizontal: '16%' }]}>
+                  <Text style={[styles.cardButtonText, { color: "#52C94B" }]}>Iniciar</Text>
                 </View>
               </TouchableOpacity>
             </View>
           </View>
         </View>
-        
-    </SafeAreaProvider>
+
+        <Text style={styles.title}>Conoce tus estadísticas</Text>
+        <View style={[styles.card, { backgroundColor: "#79A4FF" }]}>
+          <View style={{ marginTop: screenHeight * 0.02 }}>
+            <View style={[styles.horizontalContainer, { justifyContent: 'space-between' }]}>
+              <Ionicons style={{ paddingHorizontal: '5%' }} name="stats-chart" size={105} color="white" />
+              <FontAwesome style={{ paddingHorizontal: '7.5%' }} name="line-chart" size={70} color="white" />
+            </View>
+            <Text style={[styles.cardText, { width: screenWidth * .60 }]}>Tus sugerencias personalizadas</Text>
+            <View style={[styles.horizontalContainer, { justifyContent: 'space-between' }]}>
+              <Text style={[styles.cardText, { fontWeight: 300, fontSize: 11 }]}>Consulta tu nivel de huella de carbono y conoce en qué debes mejorar</Text>
+              <TouchableOpacity
+                onPress={async () => {
+                  navigation.navigate('UserStatistics');
+                }}>
+                <View style={[styles.cardButton, { paddingHorizontal: '16%' }]}>
+                  <Text style={[styles.cardButtonText, { fontSize: 11 }]}>Consultar</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+      </SafeAreaProvider>
 
     </ScrollView>
-   
+
   );
 };
 
@@ -87,7 +125,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 16,
     paddingTop: 20
-    
+
   },
   title: {
     fontSize: 20,
@@ -114,8 +152,8 @@ const styles = StyleSheet.create({
     width: screenWidth * 0.50,
   },
   horizontalContainer: {
-    flexDirection: 'row',     
-    alignItems: 'center',      
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   cardButton: {
     height: 35,
