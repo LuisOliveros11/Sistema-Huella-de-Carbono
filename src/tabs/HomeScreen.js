@@ -9,6 +9,14 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { AuthContext } from '../components/AuthContext';
 import { BASE_URL } from '../../config';
+import {
+  Dialog,
+  DialogAction,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "@ontech7/react-native-dialog";
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -22,6 +30,8 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   const { authToken, userData } = useContext(AuthContext);
   const baseUrl = BASE_URL;
+  const [dialogVisible, setDialogVisible] = useState(false);
+
 
 
   useEffect(() => {
@@ -41,7 +51,8 @@ const HomeScreen = () => {
     try {
       const response = await fetch(`${baseUrl}/obtenerHuellaCarbono/${userData.id}`, requestOptions);
       const data = await response.json();
-      if (data && data.breakdown && data.breakdown.length > 0) {
+      console.log(data.total_kgCO2e)
+      if (data.total_kgCO2e > 0) {
         setHasForm(true);
       } else {
         setHasForm(false);
@@ -100,6 +111,10 @@ const HomeScreen = () => {
               <Text style={[styles.cardText, { fontWeight: 300, fontSize: 11 }]}>Consulta tu nivel de huella de carbono y conoce en qué debes mejorar</Text>
               <TouchableOpacity
                 onPress={async () => {
+                  if (!hasForm) {
+                    setDialogVisible(true);
+                    return;
+                  }
                   navigation.navigate('UserStatistics');
                 }}>
                 <View style={[styles.cardButton, { paddingHorizontal: '16%' }]}>
@@ -109,6 +124,17 @@ const HomeScreen = () => {
             </View>
           </View>
         </View>
+        <Dialog open={dialogVisible} onOpenChange={setDialogVisible}>
+          <DialogHeader>
+            <DialogTitle>Atención</DialogTitle>
+            <DialogDescription>
+              Debes completar el cuestionario antes de ver tus estadísticas.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogAction onPress={() => setDialogVisible(false)}>Entendido</DialogAction>
+          </DialogFooter>
+        </Dialog>
 
       </SafeAreaProvider>
 

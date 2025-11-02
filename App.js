@@ -15,46 +15,108 @@ import EditProfile from './src/screens/EditProfile';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
 import BottomNavigator from './src/components/BottomNavigation';
 import { AuthProvider } from './src/components/AuthContext';
+import { DialogProvider } from "@ontech7/react-native-dialog";
 
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <AlertNotificationRoot>
-      <AuthProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} options={{ headerShown: true, headerTitle: "Registro" }} />
-            <Stack.Screen name="UserFormPreview" component={UserFormPreview} options={{ headerShown: false, headerTitle: "Cuestionario", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff" }} />
-            <Stack.Screen name="UserForm" component={UserForm} options={{ headerShown: true, headerTitle: "Cuestionario", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff",  animation: 'slide_from_right' }} />
-            <Stack.Screen name="NextCategory" component={NextCategory} options={{ headerShown: false, headerTitle: "Siguiente categoría", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff",  animation: 'slide_from_right' }} />
-            <Stack.Screen name="UserStatistics" component={UserStatistics} options={{ headerShown: true, headerTitle: "Estadísticas", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff",  animation: 'slide_from_right' }} />
-            <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: true, headerTitle: "Cambiar contraseña", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff",  animation: 'slide_from_right' }} />
-            <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: true, headerTitle: "Editar perfil", headerStyle: { backgroundColor: "#5ec206ff" }, headerTintColor: "#fff",  animation: 'slide_from_right' }} />
-            <Stack.Screen
-              name="Tabs"
-              component={BottomNavigator}
-              options={({ route }) => {
-                const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
-                let title = 'Inicio';
-                if (routeName === 'Ajustes') {
-                  title = 'Ajustes';
-                }
-                return {
-                  headerShown: true,
-                  headerLeft: null,
-                  title,
-                  headerTintColor: "#fff",
+    <DialogProvider>
+      <AlertNotificationRoot>
+        <AuthProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen
+                name="Register"
+                component={Register}
+                options={{ headerShown: true, headerTitle: "Registro" }}
+              />
+              <Stack.Screen
+                name="UserFormPreview"
+                component={UserFormPreview}
+                options={{
+                  headerShown: false,
+                  headerTitle: "Cuestionario",
                   headerStyle: { backgroundColor: "#5ec206ff" },
-                };
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </AuthProvider>
-    </AlertNotificationRoot>
+                  headerTintColor: "#fff"
+                }}
+              />
+              <Stack.Screen
+                name="UserForm"
+                component={UserForm}
+                options={{
+                  headerShown: true,
+                  headerTitle: "Cuestionario",
+                  headerStyle: { backgroundColor: "#5ec206ff" },
+                  headerTintColor: "#fff",
+                  animation: 'slide_from_right'
+                }}
+              />
+              <Stack.Screen
+                name="NextCategory"
+                component={NextCategory}
+                options={{
+                  headerShown: false,
+                  headerTitle: "Siguiente categoría",
+                  headerStyle: { backgroundColor: "#5ec206ff" },
+                  headerTintColor: "#fff",
+                  animation: 'slide_from_right'
+                }}
+              />
+              <Stack.Screen
+                name="UserStatistics"
+                component={UserStatistics}
+                options={{
+                  headerShown: true,
+                  headerTitle: "Estadísticas",
+                  headerStyle: { backgroundColor: "#5ec206ff" },
+                  headerTintColor: "#fff",
+                  animation: 'slide_from_right'
+                }}
+              />
+              <Stack.Screen
+                name="ChangePassword"
+                component={ChangePassword}
+                options={{
+                  headerShown: true,
+                  headerTitle: "Cambiar contraseña",
+                  headerStyle: { backgroundColor: "#5ec206ff" },
+                  headerTintColor: "#fff",
+                  animation: 'slide_from_right'
+                }}
+              />
+              <Stack.Screen
+                name="EditProfile"
+                component={EditProfile}
+                options={{
+                  headerShown: true,
+                  headerTitle: "Editar perfil",
+                  headerStyle: { backgroundColor: "#5ec206ff" },
+                  headerTintColor: "#fff",
+                  animation: 'slide_from_right'
+                }}
+              />
+              <Stack.Screen
+                name="Tabs"
+                component={BottomNavigator}
+                options={({ route }) => {
+                  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+                  let title = routeName === 'Ajustes' ? 'Ajustes' : 'Inicio';
+                  return {
+                    headerShown: true,
+                    title,
+                    headerTintColor: "#fff",
+                    headerStyle: { backgroundColor: "#5ec206ff" },
+                  };
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </AuthProvider>
+      </AlertNotificationRoot>
+    </DialogProvider>
   );
 }
 
