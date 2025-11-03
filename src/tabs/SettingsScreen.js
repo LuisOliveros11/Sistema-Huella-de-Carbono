@@ -5,10 +5,11 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import { useNavigation } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthContext } from '../components/AuthContext';
 
 const SettingsScreen = () => {
     const navigation = useNavigation();
-    //const { authToken, userData, logout } = useContext(AuthContext);
+    const { authToken, userData, logout } = useContext(AuthContext);
     const sheetRef = useRef();
 
     const handleLogout = async () => {
@@ -77,7 +78,7 @@ const SettingsScreen = () => {
 
                 <View style={styles.section}>
                     <Text style={styles.sectionHeader}>Sesión</Text>
-                    <TouchableOpacity  > 
+                    <TouchableOpacity onPress={handleLogout}> 
                         <View style={styles.row}>
                             <View style={[styles.rowIcon, { backgroundColor: "#5ec206ff" }]}>
                                 <FeatherIcon name="log-out" color="#fff" size={18}></FeatherIcon>

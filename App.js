@@ -109,6 +109,7 @@ export default function App() {
                     title,
                     headerTintColor: "#fff",
                     headerStyle: { backgroundColor: "#5ec206ff" },
+                    headerLeft: () => null,
                   };
                 }}
               />

@@ -1,14 +1,16 @@
 import { StyleSheet, View, Text, ScrollView, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { AuthContext } from '../components/AuthContext';
 import { BASE_URL } from '../../config';
+import { BackHandler, Alert } from 'react-native';
+
 import {
   Dialog,
   DialogAction,
@@ -31,7 +33,25 @@ const HomeScreen = () => {
   const { authToken, userData } = useContext(AuthContext);
   const baseUrl = BASE_URL;
   const [dialogVisible, setDialogVisible] = useState(false);
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert(
+          "Salir de la aplicación",
+          "¿Deseas salir?",
+          [
+            { text: "Cancelar", style: "cancel" },
+            { text: "Sí", onPress: () => BackHandler.exitApp() }
+          ]
+        );
+        return true; // evita regresar al login
+      };
 
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => backHandler.remove();
+    }, [])
+  );
 
 
   useEffect(() => {
