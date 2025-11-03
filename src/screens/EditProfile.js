@@ -1,26 +1,27 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import { StyleSheet, SafeAreaView, View, Image, Text, TouchableOpacity, ScrollView, Dimensions, TextInput } from 'react-native';
 import { useNavigation, } from '@react-navigation/native';
-
+import { BASE_URL } from '../../config';
+import { AuthContext } from '../components/AuthContext';
 const screenWidth = Dimensions.get('window').width;
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 const EditProfile = () => {
     const navigation = useNavigation();
-    //const baseUrl = BASE_URL;
+    const baseUrl = BASE_URL;
     const [form, setForm] = useState({
         username: '',
         email: '',
     });
-    //const { authToken, userData, updateUserData } = useContext(AuthContext);
+    const { authToken, userData, updateUserData } = useContext(AuthContext);
+
     return (
         <SafeAreaProvider style={styles.container}>
             <View style={styles.TextContainer}>
                 <Text style={styles.descriptionText}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Modifica tus datos de usuario como el nombre o tu correo electrónico vinculado a esta cuenta.
                 </Text>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} >
@@ -33,10 +34,9 @@ const EditProfile = () => {
                                 autoCorrect={false}
                                 clearButtonMode="while-editing"
                                 onChangeText={username => setForm({ ...form, username })}
-                                //placeholder={userData.name}
-                                placeholderTextColor="#6b7280"
+                                placeholder={userData.nombre}
+                                placeholderTextColor="#999999ff"
                                 style={styles.inputControlWithIcon}
-                                value={form.username}
                             />
                             <FeatherIcon name="user" size={20} color="#134ded" style={styles.inputIcon} />
                         </View>
@@ -51,10 +51,9 @@ const EditProfile = () => {
                                 clearButtonMode="while-editing"
                                 keyboardType="email-address"
                                 onChangeText={email => setForm({ ...form, email })}
-                                //placeholder={userData.email}
-                                placeholderTextColor="#6b7280"
+                                placeholder={userData.correo}
+                                placeholderTextColor="#999999ff"
                                 style={styles.inputControlWithIcon}
-                                value={form.email}
                             />
                             <FeatherIcon name="at-sign" size={20} color="#134ded" style={styles.inputIcon} />
                         </View>
@@ -63,40 +62,44 @@ const EditProfile = () => {
 
                     <View style={styles.formAction}>
                         <TouchableOpacity
-                            onPress={async () => {
+                           onPress={async () => {
+    try {
+      const response = await fetch(`${baseUrl}/usuario/${userData.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          nombre: form.username,
+          correo: form.email,
+        }),
+      });
 
-                                /*try {
-                            
-                                    const response = await fetch(`${baseUrl}/actualizarUsuario/${userData.id}`, {
-                                        method: "PUT",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                            'Authorization': `Bearer ${authToken}`,
-                                        },
-                                        body: JSON.stringify({
-                                            name: form.username,
-                                            email: form.email
-                                        })
-                                    });
+      const data = await response.json();
 
-                                    const data = await response.json();
+      if (response.ok) {
+        // 🔹 Guarda primero los datos actualizados en una variable
+        const updatedUser = {
+          ...userData,
+          nombre: form.username || userData.nombre,
+          correo: form.email || userData.correo,
+        };
 
-                                    if (response.ok) {
-                                        updateUserData({
-                                            name: form.username || userData.name,
-                                            email: form.email || userData.email
-                                        });
-                                        alert("Los datos se han actualizado exitosamente");
-                                        navigation.goBack();
-                                    } else {
-                                        alert(data.message || "Error al actualizar los datos");
-                                    }
+        // 🔹 Actualiza el contexto antes de mostrar el alert
+        updateUserData(updatedUser);
 
-                                } catch (error) {
-                                    console.error("Error al actualizar los datos:", error);
-                                    alert("No se pudo conectar al servidor.");
-                                }*/
-                            }}>
+        alert("Los datos se han actualizado exitosamente");
+        navigation.goBack();
+      } else {
+        alert(data.message || "Error al actualizar los datos");
+      }
+    } catch (error) {
+      console.error("Error al actualizar los datos:", error);
+      alert("No se pudo conectar al servidor.");
+    }
+  }}
+>
                             <View style={styles.btn}>
                                 <Text style={styles.btnText}>Editar perfil</Text>
                             </View>
