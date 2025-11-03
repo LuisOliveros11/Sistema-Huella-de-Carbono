@@ -4,19 +4,20 @@ import { StyleSheet, SafeAreaView, View, Image, Text, TouchableOpacity, ScrollVi
 import { useNavigation, } from '@react-navigation/native';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import { BASE_URL } from '../../config';
+import { AuthContext } from '../components/AuthContext';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 const screenWidth = Dimensions.get('window').width;
 
 const ChangePassword = () => {
     const navigation = useNavigation();
-    //const baseUrl = BASE_URL;
+    const baseUrl = BASE_URL;
     const [form, setForm] = useState({
         password: '',
         confirmPassword: '',
     });
-    //const { authToken, userData } = useContext(AuthContext);
+    const { authToken, userData } = useContext(AuthContext);
     return (
         <SafeAreaProvider style={styles.container}>
             <View style={styles.TextContainer}>
@@ -79,16 +80,17 @@ const ChangePassword = () => {
                                     return;
                                 }
 
+
                                 try {
 
-                                    const response = await fetch(`${baseUrl}/actualizarUsuario/${userData.id}`, {
+                                    const response = await fetch(`${baseUrl}/usuario/${userData.id}`, {
                                         method: "PUT",
                                         headers: {
                                             "Content-Type": "application/json",
                                             'Authorization': `Bearer ${authToken}`,
                                         },
                                         body: JSON.stringify({
-                                            password: form.password
+                                            contrasena: form.password
                                         })
                                     });
 
