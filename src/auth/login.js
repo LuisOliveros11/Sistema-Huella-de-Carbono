@@ -14,17 +14,20 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { AuthContext } from '../components/AuthContext';
-import { BASE_URL } from '../../config'; 
+import { BASE_URL } from '../../config';
 
 const Login = () => {
   const navigation = useNavigation();
   const { login } = useContext(AuthContext);
   const baseUrl = BASE_URL;
-  
+
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <SafeAreaProvider style={{ flex: 1, backgroundColor: '#e8ecf4' }} >
       <View style={styles.container}>
@@ -50,28 +53,36 @@ const Login = () => {
                 placeholder="anonimo@gmail.com"
                 placeholderTextColor="#6b7280"
                 style={styles.inputControlWithIcon}
-                value={form.email} 
+                value={form.email}
               />
-              <FeatherIcon name="at-sign" size={20} color="#134ded" style={styles.inputIcon} />
+              <FeatherIcon name="at-sign" size={20} color="#044e07ff" style={styles.inputIcon} />
             </View>
           </View>
 
           <View style={styles.input}>
             <Text style={styles.inputLabel}>Contraseña</Text>
             <View style={styles.inputWithIcon}>
-            <TextInput
-              autoCorrect={false}
-              clearButtonMode="while-editing"
-              onChangeText={password => setForm({ ...form, password })}
-              placeholder="********"
-              placeholderTextColor="#6b7280"
-              style={styles.inputControlWithIcon}
-              secureTextEntry={true}
-              value={form.password} 
-            />
-            <FeatherIcon name="lock" size={20} color="#134ded" style={styles.inputIcon} />
+              <TextInput
+                autoCorrect={false}
+                clearButtonMode="while-editing"
+                onChangeText={password => setForm({ ...form, password })}
+                placeholder="********"
+                placeholderTextColor="#6b7280"
+                style={styles.inputControlWithIcon}
+                secureTextEntry={!showPassword}
+                value={form.password}
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <FeatherIcon
+                  name={showPassword ? "eye" : "eye-off"}
+                  size={20}
+                  color="#044e07ff"
+                  style={styles.inputIcon}
+                />
+              </TouchableOpacity>
             </View>
           </View>
+
 
           <View style={styles.formAction}>
             <TouchableOpacity

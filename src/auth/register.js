@@ -57,8 +57,11 @@ const Register = () => {
     }
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+
   return (
-   <SafeAreaProvider style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
+    <SafeAreaProvider style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           {/* Header */}
@@ -77,7 +80,7 @@ const Register = () => {
             enableOnAndroid={true}
             extraScrollHeight={Platform.OS === 'ios' ? 100 : 120}
             contentContainerStyle={{ paddingBottom: 40 }}
-            showsVerticalScrollIndicator={false} 
+            showsVerticalScrollIndicator={false}
           >
             <View style={styles.form}>
               {/* Usuario */}
@@ -97,7 +100,7 @@ const Register = () => {
                   <FeatherIcon
                     name="user"
                     size={20}
-                    color="#134ded"
+                    color="#044e07ff"
                     style={styles.inputIcon}
                   />
                 </View>
@@ -121,7 +124,7 @@ const Register = () => {
                   <FeatherIcon
                     name="at-sign"
                     size={20}
-                    color="#134ded"
+                    color="#044e07ff"
                     style={styles.inputIcon}
                   />
                 </View>
@@ -139,15 +142,17 @@ const Register = () => {
                     placeholder="********"
                     placeholderTextColor="#6b7280"
                     style={styles.inputControlWithIcon}
-                    secureTextEntry={true}
+                    secureTextEntry={!showPassword}
                     value={form.password}
                   />
-                  <FeatherIcon
-                    name="lock"
-                    size={20}
-                    color="#134ded"
-                    style={styles.inputIcon}
-                  />
+                  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                    <FeatherIcon
+                      name={showPassword ? "eye" : "eye-off"}
+                      size={20}
+                      color="#044e07ff"
+                      style={styles.inputIcon}
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
 
@@ -165,15 +170,17 @@ const Register = () => {
                     placeholder="********"
                     placeholderTextColor="#6b7280"
                     style={styles.inputControlWithIcon}
-                    secureTextEntry={true}
+                    secureTextEntry={!showPasswordConfirm}
                     value={form.confirmPassword}
                   />
-                  <FeatherIcon
-                    name="lock"
-                    size={20}
-                    color="#134ded"
-                    style={styles.inputIcon}
-                  />
+                  <TouchableOpacity onPress={() => setShowPasswordConfirm(!showPasswordConfirm)}>
+                    <FeatherIcon
+                      name={showPasswordConfirm ? "eye" : "eye-off"}
+                      size={20}
+                      color="#044e07ff"
+                      style={styles.inputIcon}
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
 
@@ -190,7 +197,7 @@ const Register = () => {
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaProvider>
-   
+
   );
 };
 
@@ -264,10 +271,10 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   btn: {
-    backgroundColor: '#075eec',
+    backgroundColor: '#07920eff',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#075eec',
+    borderColor: '#044e07ff',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
