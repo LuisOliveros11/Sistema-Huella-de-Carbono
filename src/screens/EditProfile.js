@@ -62,44 +62,44 @@ const EditProfile = () => {
 
                     <View style={styles.formAction}>
                         <TouchableOpacity
-                           onPress={async () => {
-    try {
-      const response = await fetch(`${baseUrl}/usuario/${userData.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
-          nombre: form.username,
-          correo: form.email,
-        }),
-      });
+                            onPress={async () => {
+                                try {
+                                    const response = await fetch(`${baseUrl}/usuario/${userData.id}`, {
+                                        method: "PUT",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            Authorization: `Bearer ${authToken}`,
+                                        },
+                                        body: JSON.stringify({
+                                            nombre: form.username,
+                                            correo: form.email,
+                                        }),
+                                    });
 
-      const data = await response.json();
+                                    const data = await response.json();
 
-      if (response.ok) {
-        // 🔹 Guarda primero los datos actualizados en una variable
-        const updatedUser = {
-          ...userData,
-          nombre: form.username || userData.nombre,
-          correo: form.email || userData.correo,
-        };
+                                    if (response.ok) {
+                                        // 🔹 Guarda primero los datos actualizados en una variable
+                                        const updatedUser = {
+                                            ...userData,
+                                            nombre: form.username || userData.nombre,
+                                            correo: form.email || userData.correo,
+                                        };
 
-        // 🔹 Actualiza el contexto antes de mostrar el alert
-        updateUserData(updatedUser);
+                                        // 🔹 Actualiza el contexto antes de mostrar el alert
+                                        updateUserData(updatedUser);
 
-        alert("Los datos se han actualizado exitosamente");
-        navigation.goBack();
-      } else {
-        alert(data.message || "Error al actualizar los datos");
-      }
-    } catch (error) {
-      console.error("Error al actualizar los datos:", error);
-      alert("No se pudo conectar al servidor.");
-    }
-  }}
->
+                                        alert("Los datos se han actualizado exitosamente");
+                                        navigation.goBack();
+                                    } else {
+                                        alert(data.message || "Error al actualizar los datos");
+                                    }
+                                } catch (error) {
+                                    console.error("Error al actualizar los datos:", error);
+                                    alert("No se pudo conectar al servidor.");
+                                }
+                            }}
+                        >
                             <View style={styles.btn}>
                                 <Text style={styles.btnText}>Editar perfil</Text>
                             </View>
