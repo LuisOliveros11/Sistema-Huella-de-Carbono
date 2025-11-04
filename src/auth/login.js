@@ -30,11 +30,11 @@ const Login = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Image
-            source={require('../../assets/login_logo.png')}
+            source={require('../../assets/huella_verde.png')}
             style={styles.headerImg}
           />
-          <Text style={styles.title}>Pantalla de Login</Text>
-          <Text style={styles.subtitle}>Accede a tus datos y más</Text>
+          <Text style={styles.title}>Iniciar Sesión</Text>
+          <Text style={styles.subtitle}>Tu compromiso con el planeta comienza aquí</Text>
         </View>
 
         <View style={styles.form}>
@@ -143,10 +143,10 @@ const styles = StyleSheet.create({
   },
 
   headerImg: {
-    width: 80,
-    height: 80,
+    width: 200,
+    height: 200,
     alignSelf: 'center',
-    marginBottom: 36
+    marginBottom: 5
   },
   title: {
     fontSize: 27,
@@ -205,10 +205,10 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   btn: {
-    backgroundColor: '#075eec',
+    backgroundColor: '#07920eff',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#075eec',
+    borderColor: '#044e07ff',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
