@@ -13,6 +13,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import LifeStyleCategorySvg from '../icons/LifeStyleCategory';
+import TransportCategory from '../icons/TransportCategory';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import {
@@ -42,7 +43,11 @@ const NextCategory = ({ route }) => {
         <SafeAreaProvider style={{ flex: 1, backgroundColor: '#e8ecf4' }} >
             <View style={styles.container}>
                 <View style={styles.iconItem}>
-                    <LifeStyleCategorySvg width={170} height={170} />
+                    {category === 'Transporte' ? (
+                        <TransportCategory width={170} height={170} />
+                    ) : (
+                        <LifeStyleCategorySvg width={170} height={170} />
+                    )}
                 </View>
                 <Text style={styles.title}>{category}</Text>
                 <Text style={styles.description}>{title}</Text>
