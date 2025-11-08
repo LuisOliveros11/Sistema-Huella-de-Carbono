@@ -30,8 +30,8 @@ const SettingsScreen = () => {
         <SafeAreaProvider style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.profile}>
-                    <Text style={styles.profileName}>Nombres</Text>
-                    <Text style={styles.profileAddress}>Correo electronico</Text>
+                    <Text style={styles.profileName}>{userData.nombre}</Text>
+                    <Text style={styles.profileAddress}>{userData.correo}</Text>
                 </View>
 
                 {/* Secciones que tendrá el apartado de ajustes/settings */}
