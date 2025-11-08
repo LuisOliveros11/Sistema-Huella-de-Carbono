@@ -42,7 +42,7 @@ const ChangePassword = () => {
                                 secureTextEntry={true}
                                 value={form.password}
                             />
-                            <FeatherIcon name="lock" size={20} color="#134ded" style={styles.inputIcon} />
+                            <FeatherIcon name="lock" size={20} color="#07920eff" style={styles.inputIcon} />
                         </View>
                     </View>
 
@@ -62,7 +62,7 @@ const ChangePassword = () => {
                                 secureTextEntry={true}
                                 value={form.confirmPassword}
                             />
-                            <FeatherIcon name="lock" size={20} color="#134ded" style={styles.inputIcon} />
+                            <FeatherIcon name="lock" size={20} color="#07920eff" style={styles.inputIcon} />
                         </View>
                     </View>
 

@@ -38,7 +38,7 @@ const EditProfile = () => {
                                 placeholderTextColor="#999999ff"
                                 style={styles.inputControlWithIcon}
                             />
-                            <FeatherIcon name="user" size={20} color="#134ded" style={styles.inputIcon} />
+                            <FeatherIcon name="user" size={20} color="#07920eff" style={styles.inputIcon} />
                         </View>
                     </View>
 
@@ -55,7 +55,7 @@ const EditProfile = () => {
                                 placeholderTextColor="#999999ff"
                                 style={styles.inputControlWithIcon}
                             />
-                            <FeatherIcon name="at-sign" size={20} color="#134ded" style={styles.inputIcon} />
+                            <FeatherIcon name="at-sign" size={20} color="#07920eff" style={styles.inputIcon} />
                         </View>
                     </View>
 

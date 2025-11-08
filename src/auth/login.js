@@ -69,7 +69,7 @@ const Login = () => {
                   <FeatherIcon
                     name="at-sign"
                     size={20}
-                    color="#044e07ff"
+                    color="#07920eff"
                     style={styles.inputIcon}
                   />
                 </View>
@@ -92,7 +92,7 @@ const Login = () => {
                     <FeatherIcon
                       name={showPassword ? 'eye' : 'eye-off'}
                       size={20}
-                      color="#044e07ff"
+                      color="#07920eff"
                       style={styles.inputIcon}
                     />
                   </TouchableOpacity>

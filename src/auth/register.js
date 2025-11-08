@@ -100,7 +100,7 @@ const Register = () => {
                   <FeatherIcon
                     name="user"
                     size={20}
-                    color="#044e07ff"
+                    color="#07920eff"
                     style={styles.inputIcon}
                   />
                 </View>
@@ -124,7 +124,7 @@ const Register = () => {
                   <FeatherIcon
                     name="at-sign"
                     size={20}
-                    color="#044e07ff"
+                    color="#07920eff"
                     style={styles.inputIcon}
                   />
                 </View>
@@ -149,7 +149,7 @@ const Register = () => {
                     <FeatherIcon
                       name={showPassword ? "eye" : "eye-off"}
                       size={20}
-                      color="#044e07ff"
+                      color="#07920eff"
                       style={styles.inputIcon}
                     />
                   </TouchableOpacity>
@@ -177,7 +177,7 @@ const Register = () => {
                     <FeatherIcon
                       name={showPasswordConfirm ? "eye" : "eye-off"}
                       size={20}
-                      color="#044e07ff"
+                      color="#07920eff"
                       style={styles.inputIcon}
                     />
                   </TouchableOpacity>
